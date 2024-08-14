@@ -16,60 +16,28 @@ class Solution:
             if s[j] in s[i:j]:
                 if currentCount > longestBoi:
                     longestBoi = currentCount
-                    
+
                 while s[j] in s[i:j]:
                     i += 1
-                currentCount = 0
+
+                    if i > j:
+                        j = i
+
+                    currentCount = j - i + 1
             else:
                 currentCount += 1
             
             j += 1
+        
+        if currentCount > longestBoi:
+            longestBoi = currentCount
 
         return longestBoi
 
 
-        
-        
-        
-        if len(s) == 0:
-            return 0
-        elif (len(s) == 1):
-            return 1
-        
-        longestSubstringLength = 0
-        j = 0
-        strLen = len(s)
-
-        for i in range(strLen-1):
-            for j in range(i+1, strLen):
-                if s[j] in s[i:j]:
-                    if j-i > longestSubstringLength:
-                        longestSubstringLength = j-i
-
-                        i = s[i:j].index(s[j])
-                    break
-                
-                if j + 1 == strLen:
-                    if j-i + 1 > longestSubstringLength:
-                        longestSubstringLength = j-i + 1
-                    break
-            
-            if j == strLen - 1:
-                break
-        
-        return longestSubstringLength
-
-
-
-        
-
-print(Solution.lengthOfLongestSubstring("abcabcbb"))
+# print(Solution.lengthOfLongestSubstring("abcabcbb")) #3
 # print(Solution.lengthOfLongestSubstring("bbbbb"))
-# print(Solution.lengthOfLongestSubstring("pwwkew"))
+# print(Solution.lengthOfLongestSubstring("pwwkew")) #3
+# print(Solution.lengthOfLongestSubstring("dvdf"))
 print(Solution.lengthOfLongestSubstring("au"))
-print(Solution.lengthOfLongestSubstring("nfpdmpi"))
-
-
-
-#Go through the string, every time you encounter a char, that char's dictionary value get's the index added
-#Go through the dictionary and find the smallest gap between any chars. 
+# print(Solution.lengthOfLongestSubstring("nfpdmpi"))

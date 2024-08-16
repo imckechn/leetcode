@@ -8,34 +8,37 @@ class Solution:
         i = 0
         while(i <= lenS - (iterationAmount * wordCount)):
             wordsDic = {}
-            success = True
-            for j in range(i, iterationAmount * wordCount, iterationAmount):
-                if s[j:j + iterationAmount] in words and s[j:j + iterationAmount] not in wordsDic.keys():
-                    wordsDic[s[j:j + iterationAmount]] = j
+            success = False
+            for j in range(i, i + iterationAmount * wordCount, iterationAmount):
+                success = True
+                wordBeingChecked = s[j:j + iterationAmount]
+                if wordBeingChecked in words and words.count(wordBeingChecked) > list(wordsDic.keys()).count(wordBeingChecked):
+                    wordsDic[wordBeingChecked] = j
 
-                    if wordCount == wordsDic.keys():
+                    if wordCount == len(wordsDic):
+                        j = i
                         break
 
                 else:
                     success = False
-                    if s[j:j + iterationAmount] not in words:
-                        i = j + iterationAmount
+                    if wordBeingChecked not in words:
+                        i = j
 
-                    elif (s[j:j + iterationAmount] in wordsDic.keys):
-                        i = wordsDic[s[j:j + iterationAmount]]
+                    elif ((wordBeingChecked in wordsDic.keys())):
+                        i = wordsDic[wordBeingChecked]
 
                     break
-
-                    
                     
             if success:
                 substringIndexes.append(i)
-                i = iterationAmount * wordCount
+                i = j
+            
+            i += iterationAmount
+
+        return substringIndexes
                     
 
-        
-
-
-print(Solution.findSubstring('barfoothefoobarman', ['foo', 'bar'])) #[0,9]
+# print(Solution.findSubstring('barfoothefoobarman', ['foo', 'bar'])) #[0,9]
 # print(Solution.findSubstring('wordgoodgoodgoodbestword', ["word","good","best","word"])) #[]
 # print(Solution.findSubstring('barfoofoobarthefoobarman', ["bar","foo","the"])) #[6, 9, 12]
+print(Solution.findSubstring('wordgoodgoodgoodbestword', ["word","good","best","good"])) #[8]

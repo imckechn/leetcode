@@ -6,7 +6,7 @@ class Solution:
         for i in range(len(num)):
             char = num[i]
             value = int(char) * (10 ** (len(num) - i -1))
-            if char != 4 and char != 9:
+            if char != '4' and char != '9':
                 while (value > 0):
                     if value - 1000 >= 0:
                         output += "M"
@@ -30,6 +30,19 @@ class Solution:
                         output += "I"
                         value -= 1
 
+            else:
+                if value == 4:
+                    output += "IV"
+                elif value == 9:
+                    output += "IX"
+                elif value == 40:
+                    output += "XL"
+                elif value == 90:
+                    output += "XC"
+                elif value == 400:
+                    output += "CD"
+                elif value == 900:
+                    output += "CM"
         return output
 
 print(Solution.intToRoman(3749)) #"MMMDCCXLIX":

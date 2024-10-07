@@ -23,7 +23,8 @@ class Solution:
                         else:
                             volumn += elevation * (i - foundHeights[j] - 1)
 
-
+            if elevation != 0:
+                foundHeights[elevation] = i
 
 
             # if i > 0 and height[i-1] <= elevation:
@@ -45,8 +46,7 @@ class Solution:
             # for i in range(elevation+1):  # Remove all heights smaller than 
             #     foundHeights.pop(i)
 
-            if elevation != 0:
-                foundHeights[elevation] = i
+            
 
         return volumn
 

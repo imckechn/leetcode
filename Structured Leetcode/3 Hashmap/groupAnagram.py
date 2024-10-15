@@ -1,23 +1,12 @@
 class Solution:
     def groupAnagrams(strs):
-        groups = []
-        anagrams = []
-
+        grouped = {}
         for word in strs:
-            wrd = {}
-            for char in word:
-                if char in wrd.keys():
-                    wrd[char] += 1
-                else:
-                    wrd[char] = 1
-
-            if wrd in anagrams:
-                groups[anagrams.index(wrd)].append(word)
+            sorted_word = ''.join(sorted(word))
+            if sorted_word in grouped:
+                grouped[sorted_word].append(word)
             else:
-                anagrams.append(wrd)
-                groups.append([word])
-
-        return groups
-        
+                grouped[sorted_word] = [word]
+        return list(grouped.values())           
 
 print(Solution.groupAnagrams(["eat","tea","tan","ate","nat","bat"]))

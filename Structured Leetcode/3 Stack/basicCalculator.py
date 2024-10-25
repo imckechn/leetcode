@@ -76,17 +76,17 @@ class Solution:
         return expression
     
     def distributeNeg(expression, multi):        
-        for i in range(len(expression) - 1):
+        for i in range(1, len(expression) - 1):
             if expression[i] == "-" and expression[i+1] == "(":
-                nextBracket = Solution.findLastOccurance(expression[i:], ")")
+                nextBracket = i + Solution.findLastOccurance(expression[i:], ")")
 
                 expression[i] = "+"
                 if multi == "-":
-                    expression = expression[:i] + Solution.distributeNeg(expression[i+1:nextBracket], "+") + expression[nextBracket:]
+                    expression = expression[:i+2] + Solution.distributeNeg(expression[i+2:nextBracket], "+") + expression[nextBracket:]
                 else:
-                    expression = expression[:i] + Solution.distributeNeg(expression[i+1:nextBracket], "-") + expression[nextBracket:]
+                    expression = expression[:i+2] + Solution.distributeNeg(expression[i+2:nextBracket], "-") + expression[nextBracket:]
 
-                i = nextBracket
+                i = i + nextBracket
 
             elif expression[i] == "+" and multi == "-":
                 expression[i] = "-"
@@ -96,15 +96,30 @@ class Solution:
                 i = Solution.findLastOccurance(expression, ")")
 
         return expression
+    
+    def removeStupidBrackets(expression):
+        i = 0
+        while i < len(expression):
+            if expression[i] == "(" and expression[i+2] == ")":
+                expression.pop(i+2)
+                expression.pop(i)
+            else:
+                i = i + 1
+
+        return expression
+            
 
     def calculate(expression):
+        turnWholeThingNegative = False
         expression = expression.replace(" ", "")
         expression = re.findall(r'\d+|[()+\-*/]', expression)
+        expression = Solution.removeStupidBrackets(expression)
         expression = Solution.setNegativeNumbers(expression)
         expression = Solution.distributeNeg(expression, "+")
 
-        if expression[0] == "+":
+        if expression[0] == "-":
             expression.pop(0)
+            turnWholeThingNegative = True
         
         openBracketIndex = Solution.findLastOccurance(expression, "(")
         while openBracketIndex != -1:
@@ -126,14 +141,18 @@ class Solution:
             expression = expression[:openBracketIndex] + soln + expression[closedBracketIndex+1:]
             openBracketIndex = Solution.findLastOccurance(expression, "(")
 
+        if turnWholeThingNegative:
+            return int(Solution.bedmass(expression, "+")[0]) * -1
         return int(Solution.bedmass(expression, "+")[0])
     
 # print(Solution.calculate("1 + 2 ")) 
-# print(Solution.calculate("(1+(4+5+2)-3)+(6+8)"))
+print(Solution.calculate("(1+(4+5+2)-3)+(6+8)"))
 # print(Solution.calculate(" 2-1 + 2 "))
 # print(Solution.calculate("0"))
 # print(Solution.calculate("1-(     -2)"))
 # print(Solution.calculate("1-(-(-(-2)))"))
 # print(Solution.calculate("-(2 + 3)"))
 # print(Solution.calculate("-2 + 3"))
-print(Solution.calculate("- (3 + (4 + 5))"))
+# print(Solution.calculate("- (3 + (4 + 5))"))
+# print(Solution.calculate("1-(5)"))
+print(Solution.calculate("2-(5-6)"))

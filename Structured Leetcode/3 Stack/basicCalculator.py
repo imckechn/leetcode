@@ -1,158 +1,57 @@
 import re
 
 class Solution:
-    def doMath(a, b, operator, multiplier):
-        a = int(a)
-        b = int(b)
-
-        if operator == "+":
-            if multiplier == "-":
-                return a - b
-            return a + b
-        elif operator == "*":
-            return a * b
-        elif operator == "/":
-            return int(a/b)
-        elif operator == "-":
-            if multiplier == "-":
-                return a + b
-            return a - b
-        else:
-            print("number for operator")
-            exit()
-
-    def bedmass(expression, multiplier):
-        first = ["/", "*"]
-        second = ["+", "-"]
-
-        i = 1
-        while i < len(expression):
-            if expression[i] in first:
-                val = Solution.doMath(expression[i-1], expression[i+1], expression[i], "+")
-                expression = expression[:i-1] + [val] + expression[i+2:]
-            else:
-                i = i+1
-
-        i = 1
-        while i < len(expression):
-            if expression[i] in second:
-                val = Solution.doMath(expression[i-1], expression[i+1], expression[i], multiplier)
-                expression = expression[:i-1] + [val] + expression[i+2:]
-            else:
-                i = i+1
-    
-        return expression
-    
-    def findFirstOccurance(arr, char):
-        for i in range(len(arr)):
-            if arr[i] == char:
-                return i
-            
-        return -1
-    
-    def findLastOccurance(arr, char):
-        for i in range(len(arr)-1, -1, -1):
-            if arr[i] == char:
-                return i
-            
-        return -1
-    
-    def setNegativeNumbers(expression):
-        if expression[0] == "-" and expression[1].isdigit():
-            expression.pop(0)
-            expression[0] = str(int(expression[0]) * -1)
-
-        i = 1
-        while i < len(expression)-1:
-            if expression[i] == "-" and expression[i-1] == "(" and re.match(r"^-?(0|[1-9]\d*)(\.\d+)?$", expression[i+1]):
-                expression[i+1] = str(int(expression[i+1]) * -1)
-                expression.pop(i+2)
-                expression.pop(i-1)
-                expression.pop(i-1)
-                i = i - 2
-            else:
-                i = i + 1
-
-        return expression
-    
-    def distributeNeg(expression, multi):        
-        for i in range(1, len(expression) - 1):
-            if expression[i] == "-" and expression[i+1] == "(":
-                nextBracket = i + Solution.findLastOccurance(expression[i:], ")")
-
-                expression[i] = "+"
-                if multi == "-":
-                    expression = expression[:i+2] + Solution.distributeNeg(expression[i+2:nextBracket], "+") + expression[nextBracket:]
-                else:
-                    expression = expression[:i+2] + Solution.distributeNeg(expression[i+2:nextBracket], "-") + expression[nextBracket:]
-
-                i = i + nextBracket
-
-            elif expression[i] == "+" and multi == "-":
-                expression[i] = "-"
-            elif expression[i] == "-" and multi == "-":
-                expression[i] = "+"
-            elif expression[i] == "(":
-                i = Solution.findLastOccurance(expression, ")")
-
-        return expression
-    
-    def removeStupidBrackets(expression):
-        i = 0
-        while i < len(expression):
-            if expression[i] == "(" and expression[i+2] == ")":
-                expression.pop(i+2)
-                expression.pop(i)
-            else:
-                i = i + 1
-
-        return expression
-            
-
     def calculate(expression):
-        turnWholeThingNegative = False
-        expression = expression.replace(" ", "")
-        expression = re.findall(r'\d+|[()+\-*/]', expression)
-        expression = Solution.removeStupidBrackets(expression)
-        expression = Solution.setNegativeNumbers(expression)
-        expression = Solution.distributeNeg(expression, "+")
+        stack = []
+        total = 0
+        operator = 1
+        currentNumber = 0
 
-        if expression[0] == "-":
-            expression.pop(0)
-            turnWholeThingNegative = True
-        
-        openBracketIndex = Solution.findLastOccurance(expression, "(")
-        while openBracketIndex != -1:
-            multiplier = "+"
-            closedBracketIndex = Solution.findFirstOccurance(expression[openBracketIndex:], ")") + openBracketIndex
+        for i in range(len(expression)):
+            e = expression[i]
 
-            if expression[openBracketIndex - 1] == "-":
+            if e.isdigit():
+                currentNumber = currentNumber * 10 + int(e)
 
-                if expression[0] == "-":
-                    expression.pop(0)
-                    openBracketIndex = openBracketIndex - 1
-                    closedBracketIndex = closedBracketIndex - 1
-                else:
-                    expression[openBracketIndex - 1] = "+"
+            else:
+                total += int(currentNumber) * operator
+                currentNumber = 0
+
+                if e == "+" or e == "-":
+                    if e == "-":
+                        operator = -1
+                    else:
+                        operator = 1
+                
+                elif e == "(":
+                    stack.append([total, operator])
+                    total = 0
+                    operator = 1
+
+                elif e == ")":
+                    combo = stack.pop(-1)
+                    oldTotal = combo[0]
+                    oldOperator = combo[1]
+
+                    oldTotal += total * oldOperator
+                    total = oldTotal
+
+        total += int(currentNumber) * operator
+        return total
 
 
-                multiplier = "-"
-            soln = Solution.bedmass(expression[openBracketIndex+1:closedBracketIndex], multiplier)
-            expression = expression[:openBracketIndex] + soln + expression[closedBracketIndex+1:]
-            openBracketIndex = Solution.findLastOccurance(expression, "(")
 
-        if turnWholeThingNegative:
-            return int(Solution.bedmass(expression, "+")[0]) * -1
-        return int(Solution.bedmass(expression, "+")[0])
     
-# print(Solution.calculate("1 + 2 ")) 
+print(Solution.calculate("1 + 2 ")) 
 print(Solution.calculate("(1+(4+5+2)-3)+(6+8)"))
-# print(Solution.calculate(" 2-1 + 2 "))
-# print(Solution.calculate("0"))
-# print(Solution.calculate("1-(     -2)"))
-# print(Solution.calculate("1-(-(-(-2)))"))
-# print(Solution.calculate("-(2 + 3)"))
-# print(Solution.calculate("-2 + 3"))
-# print(Solution.calculate("- (3 + (4 + 5))"))
-# print(Solution.calculate("1-(5)"))
+print(Solution.calculate(" 2-1 + 2 "))
+print(Solution.calculate("0"))
+print(Solution.calculate("1-(     -2)"))
+print(Solution.calculate("1-(-(-(-2)))"))
+print(Solution.calculate("-(2 + 3)"))
+print(Solution.calculate("-2 + 3"))
+print(Solution.calculate("- (3 + (4 + 5))"))
+print(Solution.calculate("1-(5)"))
 print(Solution.calculate("2-(5-6)"))
+print(Solution.calculate("2-1-0+2+4+5-1"))
+print(Solution.calculate("2108923"))

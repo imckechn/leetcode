@@ -10,11 +10,19 @@ func main() {
 
 	b := TreeNode{}
 	b.Val = 4
-	head.Right = &b
+	a.Right = &b
 
 	c := TreeNode{}
 	c.Val = 3
 	a.Left = &c
+
+	d := TreeNode{}
+	d.Val = 5
+	head.Right = &d
+
+	e := TreeNode{}
+	e.Val = 6
+	d.Right = &e
 
 	flatten(&head)
 }
@@ -51,11 +59,14 @@ func flatten(root *TreeNode) {
 		return
 	}
 
-	if root.Left != nil {
-		flatten(root.Left)
-	}
 	if root.Right != nil {
 		flatten(root.Right)
+	}
+
+	if root.Left != nil {
+		flatten(root.Left)
+	} else {
+		return
 	}
 
 	temp := root.Right

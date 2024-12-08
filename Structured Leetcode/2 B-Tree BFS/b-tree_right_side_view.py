@@ -7,6 +7,8 @@ class TreeNode:
 
 from typing import List, Optional
 
+#Did not solve with BFS, need to redo
+
 
 class Solution:
     def rightSideView(root: Optional[TreeNode]) -> List[int]:

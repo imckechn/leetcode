@@ -26,17 +26,28 @@ class Solution:
 
         elif len(inorder) == 2:
             if inorder[0] == postorder[0]:
-                leaf = TreeNode(postorder[0])
-                return TreeNode(postorder[1], leaf)
+                leaf = TreeNode(postorder[1])
+                return TreeNode(postorder[0], leaf)
             
             else:
                 leaf = TreeNode(postorder[1])
                 return TreeNode(postorder[0], None, leaf)
             
         elif len(inorder) == 3:
-            leafA = TreeNode(postorder[0])
-            leafB = TreeNode(postorder[1])
-            return TreeNode(postorder[2], leafA, leafB)
+            if inorder == postorder:
+                leaf = TreeNode(inorder[0])
+                leaf = TreeNode(inorder[1], leaf)
+                return TreeNode(inorder[2], leaf)
+            
+            elif inorder[0] != postorder[0] and inorder[-1] == postorder[-1]:
+                rightLeaf = TreeNode(postorder[0])
+                leftLeaf = TreeNode(postorder[1], None, rightLeaf)
+                return TreeNode(postorder[2], leftLeaf)
+
+            else:
+                leafA = TreeNode(postorder[0])
+                leafB = TreeNode(postorder[1])
+                return TreeNode(postorder[2], leafA, leafB)
 
     def buildLeft(inorder, postorder, leftNode):
         if len(inorder) < 4:
@@ -71,14 +82,27 @@ class Solution:
         leftNode, rightNode = None, None
     
         while True:
-            if currentSpot + 2 >= len(postorder)-1:
-                lastSpot = len(postorder)-2
-                leftNode = Solution.buildLeft(inorder[currentSpot:lastSpot+1], postorder[currentSpot:lastSpot+1], leftNode)
+            if inorder[currentSpot] == postorder[-1]:
                 root = TreeNode(postorder[-1], leftNode)
                 break
 
-            elif inorder[currentSpot] == postorder[-1]:
+            elif inorder[currentSpot+1] == postorder[-1]:
+                if currentSpot + 2 == len(postorder):
+                    return Solution.buildLeft(inorder[currentSpot:currentSpot+2], postorder[currentSpot:currentSpot+2], leftNode)
+                
+                leftNode = TreeNode(inorder[currentSpot])
                 root = TreeNode(postorder[-1], leftNode)
+                currentSpot = currentSpot+1
+                break
+
+            elif inorder[currentSpot + 2] == postorder[-1]:
+                if currentSpot + 3 == len(postorder):
+                    return Solution.buildLeft(inorder[currentSpot:currentSpot+3], postorder[currentSpot:currentSpot+3], leftNode)
+
+                lastSpot = len(postorder)-2
+                leftNode = Solution.buildLeft(inorder[currentSpot:lastSpot+1], postorder[currentSpot:lastSpot+1], leftNode)
+                root = TreeNode(postorder[-1], leftNode)
+                currentSpot = currentSpot + 2
                 break
 
             elif inorder[currentSpot] == postorder[currentSpot]:
@@ -129,12 +153,17 @@ class Solution:
 inorderA = [1,2]
 postOrderA = [2,1]
 
+# inorderA = [1,2,3]
+# postOrderA = [3,2,1]
+
+# inorderA = [2,3,1]
+# postOrderA = [3,2,1]
+
 # inorderA = [3,2,1]
 # postOrderA = [3,2,1]
 
 inorderB = [-1]
 postOrderB = [-1]
-
 
 Solution.buildTree(inorderA, postOrderA)
 Solution.buildTree(inorderB, postOrderB)

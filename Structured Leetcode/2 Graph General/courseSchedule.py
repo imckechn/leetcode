@@ -10,34 +10,53 @@ class ListNode:
 
 class Solution:
     def checkForCycle(graph, numCourses, currentLevel):
+        if graph.val == graph.val2:
+            return True
+
         currentLevel += 1
 
         if currentLevel == numCourses:
-            return False
+            return True
         
         else:
             if len(graph.next) > 0:
                 for child in graph.next:
                     ans = Solution.checkForCycle(child, numCourses, currentLevel)
 
-                    if not ans:
-                        return False
+                    if ans:
+                        return True
                     
-        return True
+        return False
 
-    def checkCourse(graphA, graphB):
+    def checkCourse(graphA, graphB, maxDepth):
+        if maxDepth == -1:
+            return False
+
         if graphA.val2 == graphB.val:
             graphA.next.append(graphB)
             return True
         else:
             ans = None
             for elem in graphA.next:
-                newAns = Solution.checkCourse(elem, graphB)
+                newAns = Solution.checkCourse(elem, graphB, maxDepth-1)
 
                 if newAns:
                     return True
 
         return False
+    
+    def addToGraph(graph, course):
+        if graph.val2 == course[0]:
+            graph.next.append(ListNode(course[0], course[1]))
+            return True
+        else:
+            for sub in graph.next:
+                ans = Solution.addToGraph(sub, course)
+
+                if ans:
+                    return ans
+            return False
+
 
     def addCourse(graph, course):   #course needs to be converted to a ListNode before entering this function
         if course[1] == graph.val:
@@ -51,9 +70,28 @@ class Solution:
                 if newAns:
                     return True
 
-        return ListNode(course[0], course[1]) 
+        return ListNode(course[0], course[1])
+    
+    def sort(courses):
+        if len(courses) < 2:
+            return courses
 
-    def canFinish(numCourses: int, prerequisites: List[List[int]]) -> bool:
+        changed = False
+
+        for i in range(len(courses)-1):
+            if courses[0][0] > courses[1][0]:
+                temp = courses[0]
+                courses[0] = courses[1]
+                courses[1] = temp
+                changed = True
+
+        if changed:
+            return Solution.sort(courses)
+        return courses
+
+
+    def canFinish(self, numCourses: int, prerequisites: List[List[int]]) -> bool:
+        prerequisites = Solution.sort(prerequisites)
         graphs = []
 
         for course in prerequisites:
@@ -61,35 +99,38 @@ class Solution:
             for graph in graphs:
                 ans = Solution.addCourse(graph, course)
 
-                if type(ans) == ListNode:
-                    graphs.append(ans)
-                    break
-
                 if ans:
                     break
+            
+            if type(ans) == ListNode:
+                graphs.append(ans)
 
             if not ans:
                 graphs.append(ListNode(course[0], course[1]))
 
-        #See if you can reorg the graph to attach them to eachother
-
         i = 0
         while i < len(graphs):
             for elem in graphs:
-                ans = Solution.checkCourse(elem, graphs[i])   #Wont work due to graphs[i] being a ListNode
+                # if elem == graphs[i]:
+                #     continue
+
+                ans = Solution.checkCourse(elem, graphs[i], numCourses)   #Wont work due to graphs[i] being a ListNode
                 
                 if ans == True and elem != graphs[i]:
                     graphs.pop(i)
-                else:
-                    i += 1
+            i += 1
         
         for graph in graphs:
             ans = Solution.checkForCycle(graph, numCourses, 0)
 
-            if not ans:
-                return ans
+            if ans:
+                return not ans
             
         return True
 
 
-print(Solution.canFinish(2, [[1,0],[0,1]]))
+# print(Solution.canFinish(None, 2, [[1,0],[0,1]])) #False
+# print(Solution.canFinish(None, 2, [[1,0]])) #True
+print(Solution.canFinish(None, 5, [[1,4],[2,4],[3,1],[3,2]])) # True
+# print(Solution.canFinish(None, 20, [[0,10],[3,18],[5,5],[6,11],[11,14],[13,1],[15,1],[17,4]])) # False
+print(Solution.canFinish(None, 3, [[0,2],[1,2],[2,0]])) # False

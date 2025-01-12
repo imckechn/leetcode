@@ -28,19 +28,24 @@ class Solution:
                     
         return False
 
-    def checkCourse(graphA, graphB, maxDepth):
+    def checkCourse(elem, graphB, maxDepth):
         if maxDepth == -1:
             return False
 
-        if graphA.val2 == graphB.val:
-            graphA.next.append(graphB)
+        if elem.val == graphB.val2:
+            elem.next.append(graphB)
             return True
         else:
-            ans = None
-            for elem in graphA.next:
-                newAns = Solution.checkCourse(elem, graphB, maxDepth-1)
+            for sub in elem.next:
+                ans = Solution.checkCourse(sub, graphB, maxDepth-1)
 
-                if newAns:
+                if ans:
+                    return True
+                
+            for sub in graphB.next:
+                ans = Solution.checkCourse(elem, sub, maxDepth-1)
+
+                if ans:
                     return True
 
         return False
@@ -111,9 +116,6 @@ class Solution:
         i = 0
         while i < len(graphs):
             for elem in graphs:
-                # if elem == graphs[i]:
-                #     continue
-
                 ans = Solution.checkCourse(elem, graphs[i], numCourses)   #Wont work due to graphs[i] being a ListNode
                 
                 if ans == True and elem != graphs[i]:
@@ -131,6 +133,8 @@ class Solution:
 
 # print(Solution.canFinish(None, 2, [[1,0],[0,1]])) #False
 # print(Solution.canFinish(None, 2, [[1,0]])) #True
-print(Solution.canFinish(None, 5, [[1,4],[2,4],[3,1],[3,2]])) # True
+# print(Solution.canFinish(None, 5, [[1,4],[2,4],[3,1],[3,2]])) # True
 # print(Solution.canFinish(None, 20, [[0,10],[3,18],[5,5],[6,11],[11,14],[13,1],[15,1],[17,4]])) # False
-print(Solution.canFinish(None, 3, [[0,2],[1,2],[2,0]])) # False
+# print(Solution.canFinish(None, 3, [[0,2],[1,2],[2,0]])) # False
+# print(Solution.canFinish(None, 4, [[2,0],[1,0],[3,1],[3,2],[1,3]])) # False
+print(Solution.canFinish(None, 4, [[0,1],[0,2],[1,3],[3,0]])) # False

@@ -1,140 +1,55 @@
 from typing import List, Optional
 
-# Create a graph(s) using the data, search through the graphs (BFS/DFS) and see if you arrive at your start node
-
-class ListNode:
-    def __init__(self, val=0, val2=0, next=None):
-        self.val = val
-        self.val2 = val2
-        self.next = [] #arr since there can be multiple children
-
 class Solution:
-    def checkForCycle(graph, numCourses, currentLevel):
-        if graph.val == graph.val2:
+    def dfs(dict, key, numCourses):
+        if key not in dict.keys():
             return True
-
-        currentLevel += 1
-
-        if currentLevel == numCourses:
-            return True
+        elif numCourses == 0:
+            return False
         
-        else:
-            if len(graph.next) > 0:
-                for child in graph.next:
-                    ans = Solution.checkForCycle(child, numCourses, currentLevel)
-
-                    if ans:
-                        return True
-                    
-        return False
-
-    def checkCourse(elem, graphB, maxDepth):
-        if maxDepth == -1:
+        prereqs = dict[key]
+        if key in prereqs:
             return False
 
-        if elem.val == graphB.val2:
-            elem.next.append(graphB)
-            return True
-        else:
-            for sub in elem.next:
-                ans = Solution.checkCourse(sub, graphB, maxDepth-1)
-
-                if ans:
-                    return True
-                
-            for sub in graphB.next:
-                ans = Solution.checkCourse(elem, sub, maxDepth-1)
-
-                if ans:
-                    return True
-
-        return False
-    
-    def addToGraph(graph, course):
-        if graph.val2 == course[0]:
-            graph.next.append(ListNode(course[0], course[1]))
-            return True
-        else:
-            for sub in graph.next:
-                ans = Solution.addToGraph(sub, course)
-
-                if ans:
-                    return ans
-            return False
-
-
-    def addCourse(graph, course):   #course needs to be converted to a ListNode before entering this function
-        if course[1] == graph.val:
-            graph.next.append(ListNode(course[0], course[1]))
-            return True
-        else:
-            newAns = None
-            for elem in graph.next:
-                newAns = Solution.addToGraph(elem, course)
-
-                if newAns:
-                    return True
-
-        return ListNode(course[0], course[1])
-    
-    def sort(courses):
-        if len(courses) < 2:
-            return courses
-
-        changed = False
-
-        for i in range(len(courses)-1):
-            if courses[0][0] > courses[1][0]:
-                temp = courses[0]
-                courses[0] = courses[1]
-                courses[1] = temp
-                changed = True
-
-        if changed:
-            return Solution.sort(courses)
-        return courses
-
-
-    def canFinish(self, numCourses: int, prerequisites: List[List[int]]) -> bool:
-        prerequisites = Solution.sort(prerequisites)
-        graphs = []
-
-        for course in prerequisites:
-            ans = False
-            for graph in graphs:
-                ans = Solution.addCourse(graph, course)
-
-                if ans:
-                    break
-            
-            if type(ans) == ListNode:
-                graphs.append(ans)
+        for pre in prereqs:
+            ans = Solution.dfs(dict, pre, numCourses-1)
 
             if not ans:
-                graphs.append(ListNode(course[0], course[1]))
-
-        i = 0
-        while i < len(graphs):
-            for elem in graphs:
-                ans = Solution.checkCourse(elem, graphs[i], numCourses)   #Wont work due to graphs[i] being a ListNode
-                
-                if ans == True and elem != graphs[i]:
-                    graphs.pop(i)
-            i += 1
+                return ans
         
-        for graph in graphs:
-            ans = Solution.checkForCycle(graph, numCourses, 0)
-
-            if ans:
-                return not ans
-            
+        dict[key] = []
         return True
 
+    def canFinish(self, numCourses: int, prerequisites: List[List[int]]) -> bool:
+        dict = {}
+        for course in prerequisites:
+            if course[0] in dict.keys():
+                dict[course[0]].append(course[1])
 
-# print(Solution.canFinish(None, 2, [[1,0],[0,1]])) #False
-# print(Solution.canFinish(None, 2, [[1,0]])) #True
-# print(Solution.canFinish(None, 5, [[1,4],[2,4],[3,1],[3,2]])) # True
-# print(Solution.canFinish(None, 20, [[0,10],[3,18],[5,5],[6,11],[11,14],[13,1],[15,1],[17,4]])) # False
-# print(Solution.canFinish(None, 3, [[0,2],[1,2],[2,0]])) # False
-# print(Solution.canFinish(None, 4, [[2,0],[1,0],[3,1],[3,2],[1,3]])) # False
+            else:
+                dict[course[0]] = [course[1]]
+
+        for key in dict.keys():
+            ans = Solution.dfs(dict, key, numCourses)
+
+            if not ans:
+                return ans
+        return True
+
+        
+
+print(Solution.canFinish(None, 2, [[1,0]])) #True
+print(Solution.canFinish(None, 5, [[1,4],[2,4],[3,1],[3,2]])) # True
+# print()
+print(Solution.canFinish(None, 20, [[0,10],[3,18],[5,5],[6,11],[11,14],[13,1],[15,1],[17,4]])) # False
+print(Solution.canFinish(None, 2, [[1,0],[0,1]])) #False
+print(Solution.canFinish(None, 20, [[0,10],[3,18],[5,5],[6,11],[11,14],[13,1],[15,1],[17,4]])) # False
+print(Solution.canFinish(None, 3, [[0,2],[1,2],[2,0]])) # False
+print(Solution.canFinish(None, 4, [[2,0],[1,0],[3,1],[3,2],[1,3]])) # False
 print(Solution.canFinish(None, 4, [[0,1],[0,2],[1,3],[3,0]])) # False
+
+
+
+print(Solution.canFinish(None, 
+                         100, 
+                         [[1,0],[2,0],[2,1],[3,1],[3,2],[4,2],[4,3],[5,3],[5,4],[6,4],[6,5],[7,5],[7,6],[8,6],[8,7],[9,7],[9,8],[10,8],[10,9],[11,9],[11,10],[12,10],[12,11],[13,11],[13,12],[14,12],[14,13],[15,13],[15,14],[16,14],[16,15],[17,15],[17,16],[18,16],[18,17],[19,17],[19,18],[20,18],[20,19],[21,19],[21,20],[22,20],[22,21],[23,21],[23,22],[24,22],[24,23],[25,23],[25,24],[26,24],[26,25],[27,25],[27,26],[28,26],[28,27],[29,27],[29,28],[30,28],[30,29],[31,29],[31,30],[32,30],[32,31],[33,31],[33,32],[34,32],[34,33],[35,33],[35,34],[36,34],[36,35],[37,35],[37,36],[38,36],[38,37],[39,37],[39,38],[40,38],[40,39],[41,39],[41,40],[42,40],[42,41],[43,41],[43,42],[44,42],[44,43],[45,43],[45,44],[46,44],[46,45],[47,45],[47,46],[48,46],[48,47],[49,47],[49,48],[50,48],[50,49],[51,49],[51,50],[52,50],[52,51],[53,51],[53,52],[54,52],[54,53],[55,53],[55,54],[56,54],[56,55],[57,55],[57,56],[58,56],[58,57],[59,57],[59,58],[60,58],[60,59],[61,59],[61,60],[62,60],[62,61],[63,61],[63,62],[64,62],[64,63],[65,63],[65,64],[66,64],[66,65],[67,65],[67,66],[68,66],[68,67],[69,67],[69,68],[70,68],[70,69],[71,69],[71,70],[72,70],[72,71],[73,71],[73,72],[74,72],[74,73],[75,73],[75,74],[76,74],[76,75],[77,75],[77,76],[78,76],[78,77],[79,77],[79,78],[80,78],[80,79],[81,79],[81,80],[82,80],[82,81],[83,81],[83,82],[84,82],[84,83],[85,83],[85,84],[86,84],[86,85],[87,85],[87,86],[88,86],[88,87],[89,87],[89,88],[90,88],[90,89],[91,89],[91,90],[92,90],[92,91],[93,91],[93,92],[94,92],[94,93],[95,93],[95,94],[96,94],[96,95],[97,95],[97,96],[98,96],[98,97],[99,97]])) # False

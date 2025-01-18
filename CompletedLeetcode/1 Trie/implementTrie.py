@@ -1,3 +1,5 @@
+# Approach was write, initial data storage was wrong, should have only used dictionary instead of a val as well. Would have been faster
+
 class Trie:
     def __init__(self):
         self.val = ""

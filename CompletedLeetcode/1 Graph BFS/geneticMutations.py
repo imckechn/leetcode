@@ -20,8 +20,7 @@ class Solution:
         for i in range(len(bank)):
             if Solution.isValidMutation(startGene, bank[i]):
                 bankCopy = bank.copy()
-                newStart = bankCopy[i]
-                bankCopy.pop(i)
+                newStart = bankCopy.pop(i)
                 ans = Solution.minMutation(self, newStart, endGene, bankCopy)
 
                 if ans < currentBest and ans != -1:

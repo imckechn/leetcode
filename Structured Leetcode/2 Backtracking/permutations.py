@@ -2,7 +2,8 @@ from typing import List, Optional
 
 class Solution:
     def backTrack(nums, frozenIndex):
-        if frozenIndex+2 == len(nums):
+        nums = nums.copy()
+        if frozenIndex+2 >= len(nums):
             return [nums.copy()]
 
         solutions = []
@@ -25,7 +26,12 @@ class Solution:
             nums[i] = temp
 
             solutions += Solution.backTrack(nums, 0)
-        
-        return set(solutions)
+            temp = nums[0]
+            nums[0] = nums[i]
+            nums[i] = temp
 
-print(Solution.permute(None, [1,2,3])) 
+        
+        return solutions
+
+# print(Solution.permute(None, [1,2,3])) 
+print(Solution.permute(None, [1])) 

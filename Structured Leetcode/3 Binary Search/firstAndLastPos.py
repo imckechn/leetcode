@@ -11,7 +11,7 @@ class Solution:
             biggest = i
 
 
-        for i in range(position, 0, -1):
+        for i in range(position, -1, -1):
             if nums[i] != nums[position]:
                 smallest = i+1
                 break
@@ -23,13 +23,10 @@ class Solution:
     def searchRange(self, nums: List[int], target: int) -> List[int]:
         if len(nums) == 0:
             return [-1,-1]
-        
-        if len(nums) == 2:
-            if nums[0] == target:
-                return Solution.crawl(nums, 0)
-            elif nums[1] == target:
-                return Solution.crawl(nums, 1)
-            return [-1,-1]
+        if len(nums) == 1:
+            if nums[0] != target:
+                return [-1,-1]
+            return[0,0]
 
         start = 0
         end = len(nums)-1
@@ -37,10 +34,16 @@ class Solution:
         while True:
             mid = (end - start) // 2 + start
 
+            if end-start == 1:
+                if nums[start] == target:
+                    return Solution.crawl(nums, start)
+                elif nums[end] == target:
+                    return Solution.crawl(nums, end)
+                else:
+                    return [-1,-1]
+
             if nums[mid] == target:
                 return Solution.crawl(nums, mid)
-            elif start+1 == end:
-                return [-1,-1]
             
             if target < nums[mid]:
                 end = mid
@@ -51,4 +54,8 @@ class Solution:
 # print(Solution.searchRange(None, [5,7,7,8,8,10], 6))
 # print(Solution.searchRange(None, [1], 1))
 # print(Solution.searchRange(None, [2, 2], 2))
-print(Solution.searchRange(None, [1, 2, 3], 3))
+# print(Solution.searchRange(None, [1, 2, 3], 3))
+# print(Solution.searchRange(None, [1, 3], 3))
+# print(Solution.searchRange(None, [3], 3))
+# print(Solution.searchRange(None, [3], 4))
+print(Solution.searchRange(None, [1,1,2], 1))

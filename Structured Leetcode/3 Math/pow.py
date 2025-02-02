@@ -11,15 +11,18 @@ class Solution:
             n *= -1
             isNeg = True
 
-        product = x
+        if n % 2 == 0:
+            half = Solution.myPow(self, x, n // 2)
+            ans = half * half
+        else:
+            ans = x * Solution.myPow(self, x, n-1)
 
-        for i in range(n-1):
-            product *= x
-        
         if isNeg:
-            return 1/product
-        return product
+            return 1/ans
+        return ans
 
-# print(Solution.myPow(None, 2.1, 3))
+
+print(Solution.myPow(None, 2, -2))
+print(Solution.myPow(None, 2.1, 3))
 print(Solution.myPow(None, 0.00001, 2147483647))
-# print(Solution.myPow(None, 8.88023, 3))
+print(Solution.myPow(None, 8.88023, 3))

@@ -1,36 +1,29 @@
 from typing import List
 
 class Solution:
-    def dfs(tri, x, y): #Need to try bottom up
-        if x == len(tri):
-            return 0
-        
-        if x+1 < len(tri):
-            if tri[x+1][y+1] == "None":
-                return tri[x][y] + tri[x+1][y]
-            elif  tri[x+1][y] == "None":
-                return tri[x][y] + tri[x+1][y+1]
+    def ufs(tri, row, mem): #Need to try bottom up
+        newRow = []
 
-        a = Solution.dfs(tri, x+1, y)
-        b = Solution.dfs(tri, x+1, y+1)
+        for i in range(len(tri[row])):
+            if tri[row][i] + mem[i] < tri[row][i] + mem[i+1]:
+                newRow.append(tri[row][i] + mem[i])
+            else:
+                newRow.append(tri[row][i] + mem[i+1])
 
-        if a<b:
-            if x+1 < len(tri):
-                tri[x+1][y+1] = "None"
-                tri[x+1][y] = a
-            return tri[x][y] + a
-        
-        if x+1 < len(tri):
-            tri[x+1][y] = "None"
-            tri[x+1][y+1] = b
-        return tri[x][y] + b
+        if len(newRow) == 1:
+            return newRow[0]
+
+        return Solution.ufs(tri, row-1, newRow)
 
     def minimumTotal(self, triangle: List[List[int]]) -> int:
-        ans = Solution.dfs(triangle, 0, 0)
+        if len(triangle) == 1:
+            return triangle[0][0]
+
+        ans = Solution.ufs(triangle, len(triangle)-2, triangle[-1])
         return ans
 
-# print(Solution.minimumTotal(None, [[2],[3,4],[6,5,7],[4,1,8,3]]))
-# print(Solution.minimumTotal(None, [[-10]]))
+print(Solution.minimumTotal(None, [[2],[3,4],[6,5,7],[4,1,8,3]])) #11
+print(Solution.minimumTotal(None, [[-10]])) #-10
 print(Solution.minimumTotal(None, [[1],[-5,-2],[3,6,1],[-1,2,4,-3]])) #-3
 
 # [[1],

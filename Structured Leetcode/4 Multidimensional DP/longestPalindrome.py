@@ -14,54 +14,49 @@ class Solution:
         return x + b - 1
 
     def getPalinSiblingsLen(s, i):
-        x = 0
+        x = 1
 
-        while i+x+1 < len(s) and i-x >= 0:
+        while i-x >= 0 and i+x+1 < len(s):
             if s[i-x] != s[i+x+1]:
                 break
             else:
-                x += 2
-        return x
+                x += 1
+        return x+1 #plus one for the value to the right
 
     def longestPalindrome(self, s: str) -> str:
         if len(s) == 0:
             return ""
         if len(s) == 1:
             return s[0]
-        if len(s) == 2:
-            if s[0] == s[1]:
-                return s
-            else:
-                return s[0]
         
         largest = 1
         index = 0
         reflect = False
 
-        for i in range(1, len(s)):
-
-            if i < len(s)-1 and s[i-1] == s[i+1]:
-                ans = Solution.getPalinRelectLen(s, i-1, i+1)
-                if ans > largest: 
-                    largest = ans
-                    index = i
-                    reflect = True
-
-            if s[i-1] == s[i]:
-                ans = Solution.getPalinSiblingsLen(s, i-1)
+        for i in range(0, len(s)-1):
+            if s[i] == s[i+1]:
+                ans = Solution.getPalinSiblingsLen(s, i)
                 if ans > largest: 
                     largest = ans
                     index = i
                     reflect = False
 
+            if i+2 < len(s):
+                if s[i] == s[i+2]:
+                    ans = Solution.getPalinRelectLen(s, i, i+2)
+                    if ans > largest: 
+                        largest = ans
+                        index = i
+                        reflect = True
+
         pal = ""
     
-        if reflect:
-            for i in range(index - math.floor(largest/2), math.ceil(index + largest/2)):
+        if not reflect:
+            for i in range(1+index - largest//2, 1+math.ceil(index + largest/2)):
                 pal += s[i]
             
         else:
-            for i in range(index - largest//2, math.ceil(index + largest/2)):
+            for i in range(index - math.floor(largest/2), math.ceil(index + largest/2)):
                 pal += s[i]
             
         return pal
@@ -69,9 +64,9 @@ class Solution:
 
 
 
+print(Solution.longestPalindrome(None, "acc")) #    cc
 # print(Solution.longestPalindrome(None, "caba")) #    aba
 print(Solution.longestPalindrome(None, "aaaa")) #    aaaa
-print(Solution.longestPalindrome(None, "acc")) #    cc
 print(Solution.longestPalindrome(None, "ccd")) #    cc
 print(Solution.longestPalindrome(None, "cbbd")) #   bb
 print(Solution.longestPalindrome(None, "ccccc")) #  ccccc

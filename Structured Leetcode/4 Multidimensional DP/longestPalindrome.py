@@ -3,25 +3,44 @@ import math
 
 class Solution:
     def getPalinRelectLen(s, a, b):
-        x = 0
+        leftPointer = -1
+        rightPointer = 1
 
-        while a-x >= 0 and b+x < len(s):
-            if s[a-x] != s[b+x]:
-                return x + b
-            else:
-                x += 1
+        left, right = a, b
 
-        return x + b - 1
+        while True:
+            if a+leftPointer >= 0 and b+rightPointer < len(s):
+                if s[a+leftPointer] == s[b+rightPointer]:
+                    left = a+leftPointer
+                    right = b+rightPointer
+
+                    leftPointer -= 1
+                    rightPointer += 1
+                    continue
+            break
+
+        return left, right+1
 
     def getPalinSiblingsLen(s, i):
-        x = 1
+        leftPointer = -1
+        rightPointer = 2
 
-        while i-x >= 0 and i+x+1 < len(s):
-            if s[i-x] != s[i+x+1]:
-                break
-            else:
-                x += 1
-        return x+1 #plus one for the value to the right
+        left, right = i, i+1
+        
+        while True:
+            if i+leftPointer >= 0 and i+rightPointer < len(s):
+                if s[i+leftPointer] == s[i+rightPointer]:
+                    left = i+leftPointer
+                    right = i+rightPointer
+
+                    leftPointer -= 1
+                    rightPointer += 1
+                    continue
+            break
+
+        return left, right+1
+
+                
 
     def longestPalindrome(self, s: str) -> str:
         if len(s) == 0:
@@ -29,43 +48,35 @@ class Solution:
         if len(s) == 1:
             return s[0]
         
+        start, stop = 0,1
         largest = 1
-        index = 0
-        reflect = False
 
         for i in range(0, len(s)-1):
             if s[i] == s[i+1]:
-                ans = Solution.getPalinSiblingsLen(s, i)
-                if ans > largest: 
-                    largest = ans
-                    index = i
-                    reflect = False
+                l, r = Solution.getPalinSiblingsLen(s, i)
+                if r-l > largest: 
+                    largest = r-l
+                    start = l
+                    stop = r
 
             if i+2 < len(s):
                 if s[i] == s[i+2]:
-                    ans = Solution.getPalinRelectLen(s, i, i+2)
-                    if ans > largest: 
-                        largest = ans
-                        index = i
-                        reflect = True
+                    l, r = Solution.getPalinRelectLen(s, i, i+2)
+                    if r-l > largest: 
+                        largest = r-l
+                        start = l
+                        stop = r
 
         pal = ""
     
-        if not reflect:
-            for i in range(1+index - largest//2, 1+math.ceil(index + largest/2)):
-                pal += s[i]
-            
-        else:
-            for i in range(index - math.floor(largest/2), math.ceil(index + largest/2)):
-                pal += s[i]
-            
-        return pal
+        for i in range(start, stop):
+            pal += s[i]
     
-
+        return pal
 
 
 print(Solution.longestPalindrome(None, "acc")) #    cc
-# print(Solution.longestPalindrome(None, "caba")) #    aba
+print(Solution.longestPalindrome(None, "caba")) #    aba
 print(Solution.longestPalindrome(None, "aaaa")) #    aaaa
 print(Solution.longestPalindrome(None, "ccd")) #    cc
 print(Solution.longestPalindrome(None, "cbbd")) #   bb

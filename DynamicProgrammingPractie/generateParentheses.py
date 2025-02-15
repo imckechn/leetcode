@@ -37,8 +37,6 @@ class Solution:
         return answer
 
 
-        
-
     def generateParenthesis(self, n: int) -> List[str]:
         if n == 1:
             return ["()"]
@@ -46,20 +44,23 @@ class Solution:
         par = Solution.generateParenthesis(self, n-1)
         copy = par.copy()
 
-        total = []
+        total = set()
         for c in copy:
-            total += Solution.subdivide(c)
+            total = total.union(set(Solution.subdivide(c)))
 
         for p in par:
-
             if "()" + p not in total:
-                total.append("()" + p)
+                total.add("()" + p)
+            if p + "()" not in total:
+                total.add(p + "()")
 
-        return total
+        return list(total)
     
 # print(Solution.generateParenthesis(None, 1))
+
+print(Solution.generateParenthesis(None, 4))
 print(Solution.generateParenthesis(None, 3))
-print(Solution.generateParenthesis(None, 5))
+# print(Solution.generateParenthesis(None, 5))
 
 # Solution.subdivide("((()))")
 # Solution.subdivide("()()(())(()())")

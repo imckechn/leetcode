@@ -14,8 +14,8 @@ class Solution:
                 elif nums[i] == pair[1]:
                     b += 1
 
-            if pair[0] == pair[1] and triplets > 1: #Issue is here
-                triplets += a
+            if pair[0] == pair[1] and a > 1: #Issue is here
+                triplets += int(a/2)
             else:
                 triplets += a * b
 
@@ -41,14 +41,14 @@ class Solution:
             factors = Solution.findFactors(num * num)
             triplets += Solution.findTriplet(factors, nums2)
 
-        for num in nums2:
-            factors = Solution.findFactors(num * num)
-            triplets += Solution.findTriplet(factors, nums2)
+        # for num in nums2:
+        #     factors = Solution.findFactors(num * num)
+        #     triplets += Solution.findTriplet(factors, nums1)
 
 
         return triplets
 
-print(Solution.numTriplets(None, [7,4], [5,2,8,9])) # 1
+# print(Solution.numTriplets(None, [7,4], [5,2,8,9])) # 1
 print(Solution.numTriplets(None, [1,1], [1,1,1])) #9
 print(Solution.numTriplets(None, [7,7,8,3], [1,2,9,7])) #2
  

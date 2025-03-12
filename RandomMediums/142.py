@@ -12,20 +12,19 @@ class Solution:
         if not head:
             return head
         
-        visited = [head]
-        current = head
+        visited = {head: True}
        
         while True:
-            if current.next == None:
+            if head.next == None:
                 return None
             
             else:
-                current = current.next
-                if current.val in visited:
-                    return current
-                
-                else:
-                    visited.append(current)
+                head = head.next
+                try: 
+                    if visited[head]:
+                        return head
+                except:
+                    visited[head] = True
 
         
 a = ListNode(-1)
@@ -48,4 +47,4 @@ g.next = h
 h.next = i
 i.next = j
 
-print(Solution.detectCycle(None, a).val)
+print(Solution.detectCycle(None, a))

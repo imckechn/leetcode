@@ -2,26 +2,24 @@ from typing import List
 
 class Solution:
     def findTriplet(factors, nums):
-        triplets = 0
+        points = 0
 
         for pair in factors:
-            a = 0
-            b = 0
-            for i in range(len(nums)):
-                if nums[i] == pair[0]:
-                    a += 1
-                
-                elif nums[i] == pair[1]:
-                    b += 1
+            copy = nums.copy()
+            while True:
+                if pair[0] in copy:
+                    copy.remove(pair[0])
 
-            if pair[0] == pair[1] and a > 1: #Issue is here
-                triplets += int(a/2)
-            else:
-                triplets += a * b
+                    if pair[1] in copy:
+                        copy.remove(pair[1])
+                        points += 1
 
-        return triplets
+                else:
+                    break
 
-    
+        return points
+
+
     def findFactors(number):
         factors = [[1, number]]
         for i in range(2, number//2):
@@ -34,21 +32,18 @@ class Solution:
 
     def numTriplets(self, nums1: List[int], nums2: List[int]) -> int:
         triplets = 0
-        nums1.sort()
-        nums2.sort()
 
         for num in nums1:
             factors = Solution.findFactors(num * num)
             triplets += Solution.findTriplet(factors, nums2)
 
-        # for num in nums2:
-        #     factors = Solution.findFactors(num * num)
-        #     triplets += Solution.findTriplet(factors, nums1)
-
+        for num in nums2:
+            factors = Solution.findFactors(num * num)
+            triplets += Solution.findTriplet(factors, nums1)
 
         return triplets
 
-# print(Solution.numTriplets(None, [7,4], [5,2,8,9])) # 1
+print(Solution.numTriplets(None, [7,4], [5,2,8,9])) # 1
 print(Solution.numTriplets(None, [1,1], [1,1,1])) #9
 print(Solution.numTriplets(None, [7,7,8,3], [1,2,9,7])) #2
  

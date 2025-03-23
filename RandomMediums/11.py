@@ -14,24 +14,15 @@ class Solution:
         leftPointer = 0
         rightPointer = len(height) - 1
 
-        while True:
-            if leftPointer == rightPointer:
-                break
-
+        while leftPointer < rightPointer:
             vol = Solution.getVolume(height, leftPointer, rightPointer)
             if vol > maxVol:
                 maxVol = vol
 
-            if height[leftPointer] > height[rightPointer] and height[leftPointer] > height[rightPointer-1]:
-                rightPointer -= 1
-            
-            elif height[rightPointer] > height[leftPointer] and height[rightPointer] > height[leftPointer+1]:
+            if height[leftPointer] < height[rightPointer]:
                 leftPointer += 1
-
-            elif height[leftPointer+1] < height[rightPointer-1]:
-                rightPointer -= 1
             else:
-                leftPointer += 1
+                rightPointer -= 1
 
         return maxVol
 

@@ -1,36 +1,17 @@
-from typing import List
+from typing import Counter, List
 
 
 class Solution:
     def numberOfPairs(self, nums1: List[int], nums2: List[int], k: int) -> int:
-        nums1.sort()
-        nums2.sort()
+        freqs = Counter(num * k for num in nums2)
+        counts = [0] * (max(nums1)+1)
 
-        mem = {}
+        for num, count in freqs.items():
+            for multiplier in range(num, len(counts), num):
+                counts[multiplier] += count
+        
+        return sum(counts[num] for num in nums1)
+    
 
-        pairs = 0
-
-        for num in nums1:
-            if num in mem.keys():
-                pairs += mem[num]
-                continue
-
-            total = 0
-
-            for second in nums2:
-                if second == 0:
-                    continue
-
-                if num >= second*k:
-                    if num % (second*k) == 0:
-                        pairs += 1
-                        total += 1
-                else:
-                    break
-
-            mem[num] = total
-
-        return pairs
-
-
-print(Solution.numberOfPairs(None, [70,70], [6,10], 7))
+print(Solution.numberOfPairs(None, [1,3,4], [1,3,4], 2))
+print(Solution.numberOfPairs(None, [1,2,4,12], [2,4], 3))

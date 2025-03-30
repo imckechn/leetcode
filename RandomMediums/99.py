@@ -8,49 +8,42 @@ from typing import Optional
 
 
 class Solution:
-    # def checkBadValues(root):
-    #     address = []
-        
-    #     if root == None or (root.left == None and root.right == None):
-    #         return address
-
-    #     #check no left
-    #     if root.left == None:
-    #         if root.val > root.right.val:
-    #             address.append(root)
-    #             return address + Solution.checkBadValues(root.right)
-
-    #     #check no right
-    #     if root.right == None:
-    #         if root.val > root.left.val:
-    #             address.append(root)
-    #             return address + Solution.checkBadValues(root.left)
-
-    #     #Need to check if it's a leaf node
-    #     if root.val > root.left.val or root.val > root.right.val:
-    #         address.append(root)
-
-    #     return address + Solution.checkBadValues(root.left) + Solution.checkBadValues(root.right)
-
-    #Need to run depth first search, then on your way back up, swap the values
-    def recoverTree(self, root: Optional[TreeNode]) -> None:
+    def fixTree(root, largest, smallest):
         if root == None:
-            return
+            return False
         
-        Solution.recoverTree(None, root.left)
-        Solution.recoverTree(None, root.right)
+        if root.left != None:
+            if root.val < root.left.val or (smallest != None and root.left.val < smallest):
+                root.val, root.left.val = root.left.val, root.val
+                return True
 
-        if root.left != None and root.val > root.left.val:
-            root.val, root.left.val = root.left.val, root.val
+        if root.right != None:
+            if root.val > root.right.val or (largest != None and root.right.val > largest):
+                root.val, root.right.val = root.right.val, root.val
+                return True
+        
+        a = Solution.fixTree(root.left, root.val, smallest)
+        b = Solution.fixTree(root.right, largest, root.val)
+        
+        return a or b
 
-        if root.right != None and root.val > root.right.val:
-            root.val, root.right.val = root.right.val, root.val
+    def recoverTree(self, root: Optional[TreeNode]) -> None:
+        ans = Solution.fixTree(root, None, None)
+        while ans:
+            ans = Solution.fixTree(root, None, None)
 
         return
 
 
-a = TreeNode(2)
-b = TreeNode(1)
-c = TreeNode(3, a, b)
+# a = TreeNode(2)
+# b = TreeNode(3, None, a)
+# c = TreeNode(1, b)
 
-Solution.recoverTree(None, c)
+a = TreeNode(2)
+b = TreeNode(4, a)
+c = TreeNode(1)
+d = TreeNode(3, c, b)
+
+
+
+Solution.recoverTree(None, d)

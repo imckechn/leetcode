@@ -22,10 +22,7 @@ class Solution:
                 root.val, root.right.val = root.right.val, root.val
                 return True
         
-        a = Solution.fixTree(root.left, root.val, smallest)
-        b = Solution.fixTree(root.right, largest, root.val)
-        
-        return a or b
+        return Solution.fixTree(root.left, root.val, smallest) or Solution.fixTree(root.right, largest, root.val)
 
     def recoverTree(self, root: Optional[TreeNode]) -> None:
         ans = Solution.fixTree(root, None, None)

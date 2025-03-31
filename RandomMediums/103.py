@@ -8,24 +8,24 @@ class TreeNode:
         self.left = left
         self.right = right
 class Solution:
-    def addChildrenToQueueEven(queue, node, level):
-        if node.left != None:
-            queue.append([node.left, level+1])
-
+    def addChildrenRightSide(stack, node, level):
         if node.right != None:
-            queue.append([node.right, level+1])
+            stack.insert(0, [node.right, level+1])
 
-        return queue
+        if node.left != None:
+            stack.insert(0, [node.left, level+1])
+
+        return stack
     
 
-    def addChildrenToQueueOdd(queue, node, level):
-        if node.right != None:
-            queue.append([node.right, level+1])
-
+    def addChildrenLeftSide(stack, node, level):
         if node.left != None:
-            queue.append([node.left, level+1])
+            stack.insert(0, [node.left, level+1])
 
-        return queue
+        if node.right != None:
+            stack.insert(0, [node.right, level+1])
+
+        return stack
 
 
     def zigzagLevelOrder(self, root: Optional[TreeNode]) -> List[List[int]]:
@@ -33,24 +33,39 @@ class Solution:
             return []
 
         values = [[root.val]]
-        queue = Solution.addChildrenToQueueOdd([], root, 0)
+        queue = [Solution.addChildrenLeftSide([], root, 0)]
         
+        rightToLeft = True
         while len(queue) != 0:
-            [node, level] = queue.pop(0)
+            stack = queue.pop(0)
+            childStack = []
 
-            #record the node value
-            if len(values) <= level:
-                values.append([node.val])
-            else:
-                values[level].append(node.val)
+            while len(stack) > 0:
+                [node, level] = stack.pop(0)
 
-            #append the children to the queue
-            if level % 2 == 0:
-                queue = Solution.addChildrenToQueueOdd(queue, node, level)
-            else:
-                queue = Solution.addChildrenToQueueEven(queue, node, level)
+                if level < len(values):
+                    values[level].append(node.val)
+                else:
+                    values.append([node.val])
 
+                if rightToLeft:
+                    childStack = Solution.addChildrenRightSide(childStack, node, level)
+                else:
+                    childStack = Solution.addChildrenLeftSide(childStack, node, level)
+
+            rightToLeft = not rightToLeft
+
+            if childStack != []:
+                queue.append(childStack)
+                    
         return values
+    
 
 
+a = TreeNode(15)
+b = TreeNode(7)
+c = TreeNode(20, a, b)
+d = TreeNode(9)
+e = TreeNode(3, d, c)
 
+Solution.zigzagLevelOrder(None, e)

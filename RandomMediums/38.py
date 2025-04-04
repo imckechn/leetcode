@@ -1,36 +1,32 @@
 class Solution:
     def countAndSay(self, n: int) -> str:
+        return ''.join(Solution.countAndSayString(n))
+
+    def countAndSayString(n):
         if n == 1:
-            return "1"
+            return ["1"]
         
-        values = Solution.countAndSay(self, n-1)
-        values = list(values)
+        values = Solution.countAndSayString(n-1)
 
-        pointerA = 0
-        pointerB = 0
-        hitEnd = False
-        while pointerB < len(values):
-            while values[pointerA] == values[pointerB]:
-                pointerB += 1
+        count = 1
+        current = values[0]
+        newValues = []
 
-                if pointerB == len(values):
-                    hitEnd = True
-                    break
+        for i in range(1, len(values)):
+            if values[i] == current:
+                count += 1
 
-            diff = pointerB - pointerA
-            i=0
-            while i < diff - 1:
-                values.pop(pointerA)
-                i += 1
+            else:
+                newValues.append(str(count))
+                newValues.append(current)
+                count = 1
+                current = values[i]
 
-            values.insert(pointerA, str(diff))
-            pointerA = pointerB - i + 1
-            pointerB = pointerB - i + 2
+        newValues.append(str(count))
+        newValues.append(current)
 
-        if not hitEnd:
-            values.insert(len(values) - 1, '1')
+        return newValues
 
-        return ''.join(values)
-
-print(Solution.countAndSay(None, 4))
+print(Solution.countAndSay(None, 1))
+print(Solution.countAndSay(None, 5))
 

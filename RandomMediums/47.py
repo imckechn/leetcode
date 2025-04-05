@@ -2,33 +2,31 @@ from typing import List
 
 
 class Solution:
-    def updatePerms(elem, perms):
-        for i in range(len(perms)):
-            perms[i].insert(0, elem)
+    def __init__(self):
+        self.permutations = []
 
-        return perms
+    def perm(self, nums, len):
+        if len == 1:
+            if nums not in self.permutations:
+                self.permutations.append(nums.copy())
+            return
+
+        self.perm(nums, len - 1)
+        for i in range(len-1):
+            if len % 2 == 0:
+                nums[i], nums[len-1] = nums[len-1], nums[i]
+            else:
+                nums[0], nums[len-1] = nums[len-1], nums[0]
+            self.perm(nums, len - 1)
 
     def permuteUnique(self, nums: List[int]) -> List[List[int]]:
-        found = []
-
         if len(nums) == 1:
-            return nums
+            return [nums]
 
-        base = nums[0]
-        for i in range(len(nums)):
-            elem = nums[0]
+        self.perm(nums, len(nums))
+        return self.permutations
 
-            perms = Solution.permuteUnique(self, nums[1:])
-
-            #Add elem to perms
-            perms = Solution.updatePerms(elem, perms)
-
-            found += perms
-
-            base = perms[0]
-            base[0], base[1] = base[1], base[0]
-
-
-        return found
-
-print(Solution.permuteUnique(None, [1,1,2]))
+sol = Solution()
+# print(sol.permuteUnique([1,2,3,4,5]))
+# sol = Solution()
+print(sol.permuteUnique([1,1,2]))

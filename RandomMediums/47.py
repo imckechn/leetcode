@@ -17,6 +17,10 @@ class Solution:
                 nums[i], nums[len-1] = nums[len-1], nums[i]
             else:
                 nums[0], nums[len-1] = nums[len-1], nums[0]
+
+            if nums in self.permutations:
+                continue
+            
             self.perm(nums, len - 1)
 
     def permuteUnique(self, nums: List[int]) -> List[List[int]]:

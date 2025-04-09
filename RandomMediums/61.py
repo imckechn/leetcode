@@ -9,7 +9,7 @@ class ListNode:
 class Solution:
     def getTailAndLength(self, head):
         length = 0
-        while head.next != None:
+        while head.next:
             length += 1
             head = head.next
 

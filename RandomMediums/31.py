@@ -9,28 +9,7 @@ from typing import List
 
 class Solution:
     def nextPermutation(self, nums: List[int]) -> None:
-        # i = len(nums) - 1
-        # firstDecreasingIndex = i
-        # while i > 0 and nums[i] <= nums[i-1]:
-        #     firstDecreasingIndex = i
-        #     i -= 1
-
-        # if firstDecreasingIndex == 0:
-        #     nums.reverse()
-        #     return nums
-        
-        # j = len(nums) - 1
-        # smallestElemIndex = j
-        # while j > firstDecreasingIndex:
-        #     if nums[smallestElemIndex] < nums[j]:
-        #         smallestElemIndex = j
-        #     j -= 1
-
-        # nums[firstDecreasingIndex], nums[smallestElemIndex] = nums[smallestElemIndex], nums[firstDecreasingIndex]
-
-        # nums[firstDecreasingIndex:smallestElemIndex].reverse()
-
-        # print(nums)
+        # Should try a backtracking approach https://medium.com/@hanxuyang0826/mastering-backtracking-from-leetcode-to-real-world-applications-4c9150de20da
         i = len(nums) - 1
         while i > 0 and nums[i-1] >= nums[i]:
             i -= 1
@@ -46,6 +25,8 @@ class Solution:
         nums[i-1], nums[j] = nums[j], nums[i-1]
 
         nums[i:] = reversed(nums[i:])
+
+
 
         
 

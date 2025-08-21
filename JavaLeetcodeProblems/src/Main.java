@@ -1,13 +1,13 @@
-import java.util.List;
-
+//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
+// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
     public static void main(String[] args) {
         //First
         ListNode a = new ListNode();
-        a.val = 3;
+        a.val = 2;
 
         ListNode b = new ListNode();
-        b.val = 3;
+        b.val = 4;
         a.next = b;
 
         ListNode c = new ListNode();
@@ -16,17 +16,18 @@ public class Main {
 
         //Second
         ListNode x = new ListNode();
-        x.val = 3;
+        x.val = 5;
 
         ListNode y = new ListNode();
-        y.val = 3;
-        x.next = b;
+        y.val = 6;
+        x.next = y;
 
         ListNode z = new ListNode();
-        z.val = 3;
-        y.next = b;
+        z.val = 4;
+        y.next = z;
 
         //Main
         ListNode ans = Two.addTwoNumbers(a, x);
+
     }
 }

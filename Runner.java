@@ -1,6 +1,6 @@
 import java.util.List;
 
-public class Main {
+public class Runner {
     public static void main(String[] args) {
         //First
         ListNode a = new ListNode();

@@ -32,6 +32,9 @@ class Solution:
 
         head = smallerListHead.next
 
+        if head == None:
+            return largerListHead.next
+
         while smallerListHead.next != None:
             smallerListHead = smallerListHead.next
 
@@ -48,4 +51,6 @@ d = ListNode(3, c)
 f = ListNode(4, d)
 g = ListNode(1, f)
 
-Solution.partition(None, g, 3)
+n = ListNode(1)
+
+Solution.partition(None, n, 0)

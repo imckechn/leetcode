@@ -7,29 +7,56 @@ class ListNode:
 
 class Solution:
     def reverseBetween(self, head: Optional[ListNode], left: int, right: int) -> Optional[ListNode]:
-        
+        copy = head
 
+        while copy.val != left:
+            copy = copy.next
 
-    def reverseLinkedList(head, end):
-        first = head.next
+        first = copy.next
         if first.next == None:
-            first.next = head
-            head.next = None
+            first.next = copy
+            copy.next = None
 
             return first
         
         second = first.next
 
-        head.next, first.next = first.next, head
-        head = first
-        first = head.next
+        copy.next, first.next = first.next, copy
+        copy = first
+        first = copy.next
 
-        while second != None or head.val == end:
+        while second != None and copy.val != right:
             first.next = second.next
-            second.next = head
+            second.next = copy
 
-            head = second
+            copy = second
             second = first.next
+
+        return head
+
+
+    def reverseLinkedList(copy, right):
+        first = copy.next
+        if first.next == None:
+            first.next = copy
+            copy.next = None
+
+            return first
+        
+        second = first.next
+
+        copy.next, first.next = first.next, copy
+        copy = first
+        first = copy.next
+
+        while second != None and copy.val != right:
+            first.next = second.next
+            second.next = copy
+
+            copy = second
+            second = first.next
+
+        return copy
             
 
 
@@ -42,7 +69,5 @@ c = ListNode(4, b)
 d = ListNode(3, c)
 f = ListNode(2, d)
 g = ListNode(1, f)
-
-Solution.reverseLinkedList(g)
 
 Solution.reverseBetween(None, g, 2, 5)

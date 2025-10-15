@@ -9,31 +9,54 @@ class TreeNode:
         self.right = right
         
 class Solution:
-    #Generate every possible compination of n numbers
-    # Generate trees for each combination in order of the values as they appear in the array
-
-    
     def generateTrees(self, n: int) -> List[Optional[TreeNode]]:
         numbers = []
+
+
         for i in range(1, n+1):
             numbers.append(i)
 
-        variations = []
-        for i in range(n):
-            variations += Solution.generateVariations(numbers, 0)
+        variations = list(Solution.generateVariations(numbers))
 
-    def generateVariations(numbers, depth):
-        if depth == len(numbers)-1:
-            return [copy.deepcopy(numbers)]
+        trees = set()
 
-        numbers[depth], numbers[depth+1] = numbers[depth+1], numbers[depth]
+        for lst in variations:
+            trees.add(Solution.createTree(lst))
 
-        return Solution.generateVariations(numbers, depth + 1) + [copy.deepcopy(numbers)]
+        return trees
+
+    def createTree(lst):
+        root = TreeNode(lst[0])
+
+        for elem in lst[1:]:
+            Solution.appendToTree(root, elem)
+        
+        return root
     
+    def appendToTree(root, elem):
+        while True:
+            if root.val < elem:
+                if root.right == None:
+                    root.right = TreeNode(elem)
+                    break
+                else:
+                    root = root.right 
+            else:
+                if root.left == None:
+                    root.left = TreeNode(elem)
+                    break
+                else:
+                    root = root.left 
 
-    # def buildTree(root, values):
+
+    def generateVariations(numbers):
+        if len(numbers) <= 1:
+            yield numbers
+            return
+
+        for num in Solution.generateVariations(numbers[1:]):
+            for i in range(len(numbers)):
+                yield num[:i] + numbers[0:1] + num[i:]
 
 
-
-
-Solution.generateTrees(None, 5)
+Solution.generateTrees(None, 3)

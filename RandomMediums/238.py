@@ -10,7 +10,6 @@ class Solution:
             total *= nums[i-1]
             answer[i] *= total
 
-            
         total = 1
         for i in range(len(nums)-2, -1, -1):
             total *= nums[i+1]

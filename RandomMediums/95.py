@@ -9,21 +9,42 @@ class TreeNode:
         self.right = right
         
 class Solution:
-    def generateTrees(self, n: int) -> List[Optional[TreeNode]]:
-        numbers = []
+    def generateTrees(self, n: int):
+        def generate_trees(start, end):
+            if start > end:
+                return [None,]
+            
+            all_trees = []
+            for i in range(start, end + 1):
+                left_trees = generate_trees(start, i - 1)
+                right_trees = generate_trees(i + 1, end)
+                
+                for l in left_trees:
+                    for r in right_trees:
+                        current_tree = TreeNode(i)
+                        current_tree.left = l
+                        current_tree.right = r
+                        all_trees.append(current_tree)
+            
+            return all_trees
+        
+        return generate_trees(1, n) if n else []
+
+    # def generateTrees(self, n: int) -> List[Optional[TreeNode]]:
+    #     numbers = []
 
 
-        for i in range(1, n+1):
-            numbers.append(i)
+    #     for i in range(1, n+1):
+    #         numbers.append(i)
 
-        variations = list(Solution.generateVariations(numbers))
+    #     variations = list(Solution.generateVariations(numbers))
 
-        trees = set()
+    #     trees = set()
 
-        for lst in variations:
-            trees.add(Solution.createTree(lst))
+    #     for lst in variations:
+    #         trees.add(Solution.createTree(lst))
 
-        return trees
+    #     return trees
 
     def createTree(lst):
         root = TreeNode(lst[0])

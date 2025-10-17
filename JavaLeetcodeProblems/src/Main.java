@@ -26,14 +26,13 @@ public class Main {
 //        z.val = 4;
 //        y.next = z;
 
-
-        String input = "abcabcbb";
-
-        //Main
-        8
-
-        System.out.println("");
-        ListNode ans = Two.addTwoNumbers(a, x);
+//
+//        String input = "abcabcbb";
+//
+//        //Main
+//
+//        System.out.println("");
+//        ListNode ans = Two.addTwoNumbers(a, x);
 
     }
 }

@@ -9,11 +9,22 @@ class TreeNode:
         self.right = right
 
 class Solution:
-    def __init__(self):
-        self.smallest = None
-
     def goodNodes(self, root: TreeNode) -> int:
-        return Solution.findGoodNodes(self, root, float(inf))
+        if root == None:
+            return 0
+        
+        return int(Solution.findGoodNodes(self, root, float(-inf)))
     
 
-    def findGoodNodes(self, root, smallest)
+    def findGoodNodes(self, root, largest):
+        goodNodes = 0
+        if root.val >= largest:
+            goodNodes += 1
+
+        if root.right != None:
+            goodNodes += Solution.findGoodNodes(self, root.right, max(largest, root.val))
+
+        if root.left != None:
+            goodNodes += Solution.findGoodNodes(self, root.left, max(largest, root.val))
+
+        return goodNodes

@@ -34,6 +34,7 @@ class Solution:
         current = toBeDeleted.left
 
         if not current.right:
+            current.right = toBeDeleted.right
             return current
         
         else:
@@ -54,13 +55,13 @@ class Solution:
            if head.left and head.left.val == key:
                return head
            else:
-            return Solution.search(head.left, key) 
+                return Solution.search(head.left, key) 
 
         else:
             if head.right and head.right.val == key:
                 return head
             else:
-                Solution.search(head.right, key)
+                return Solution.search(head.right, key)
     
 
 root = TreeNode(1)

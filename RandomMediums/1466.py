@@ -1,22 +1,41 @@
-from typing import List
+from typing import List, Tuple
 
 
 class Solution:
     def minReorder(self, n: int, connections: List[List[int]]) -> int:
-        pointingToZero = {0: True}
-        count = 0
+        # pointingToZero = {0: True}
+        # count = 0
 
-        while len(pointingToZero.keys()) != n:
-            for con in connections:
-                if con[0] in pointingToZero.keys() and con[1] not in pointingToZero.keys():
-                    con[1], con[0] = con[0], con[1]
-                    pointingToZero[con[0]] = True
-                    count += 1
+        # while len(pointingToZero.keys()) != n:
+        #     for con in connections:
+        #         if con[0] in pointingToZero.keys() and con[1] not in pointingToZero.keys():
+        #             con[1], con[0] = con[0], con[1]
+        #             pointingToZero[con[0]] = True
+        #             count += 1
 
-                elif con[1] in pointingToZero.keys():
-                    pointingToZero[con[0]] = True
+        #         elif con[1] in pointingToZero.keys():
+        #             pointingToZero[con[0]] = True
 
-        return count
+        # return count
+    
+
+        #Better Soln
+        adj = [[] for _ in range(n)]
+        for connection in connections:
+            adj[connection[0]].append((connection[1], 1))
+            adj[connection[1]].append((connection[0], -1))
+        visited = [False] * n
+        minChange = [0]
+        self.dfs(adj, visited, minChange, 0)
+        return minChange[0]
+    
+    def dfs(self, adj: List[List[Tuple[int, int]]], visited: List[bool], minChange: List[int], currCity: int) -> None:
+            visited[currCity] = True
+            for neighbourCity in adj[currCity]:
+                if not visited[neighbourCity[0]]:
+                    if neighbourCity[1] == 1:
+                        minChange[0] += 1
+                    self.dfs(adj, visited, minChange, neighbourCity[0])
     
 sol = Solution()
 

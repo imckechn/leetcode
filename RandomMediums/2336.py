@@ -5,29 +5,35 @@ class SmallestInfiniteSet:
     def __init__(self):
         self.deleted = []
         self.added = []
-        self.current = 0
+        self.current = 1
+
+    def addToDeleted(self, num):
+        for i in range(len(self.deleted)):
+            if self.deleted[i] > num:
+                self.deleted.insert(i, num)
+                return
+        
+        self.deleted.append(num)
 
     def popSmallest(self) -> int:
-        if self.deleted != []:
-            self.deleted.append(self.current)
-            self.current += 1
-        
+        if len(self.added) > 0 and self.added[0] < self.current:
+            toBeDeleted = self.added.pop(0)
+            
         else:
-            self.deleted.append(self.current)
+            toBeDeleted = self.current
             self.current += 1
 
+        self.addToDeleted(toBeDeleted)
+        return toBeDeleted
+
     def addBack(self, num: int) -> None:
-        if num < self.current:
-            if self.added == []:
-                self.added.append(num)
-            else:
-                for i in range(len(self.added)):
-                    if self.added[i] > num:
-                        self.added.insert(i, num)
-                        break
+        if num in self.deleted:
+            self.deleted.remove(num)
+            self.added.append(num)
 
 
 smol = SmallestInfiniteSet()
+smol.addBack(0)
 
 smol.popSmallest()
 smol.popSmallest()

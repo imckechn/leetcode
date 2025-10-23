@@ -1,19 +1,10 @@
-#Need to initialize a list of what's been deleted
-#Create a list of what's been added, which has had to have been deleted
+# Need to swap over added to a set.
+# See where else you can swap out the logic for set opperations.
 
 class SmallestInfiniteSet:
     def __init__(self):
-        self.deleted = []
-        self.added = []
+        self.added = set()
         self.current = 1
-
-    def addToDeleted(self, num):
-        for i in range(len(self.deleted)):
-            if self.deleted[i] > num:
-                self.deleted.insert(i, num)
-                return
-        
-        self.deleted.append(num)
 
     def popSmallest(self) -> int:
         if len(self.added) > 0 and self.added[0] < self.current:
@@ -23,12 +14,10 @@ class SmallestInfiniteSet:
             toBeDeleted = self.current
             self.current += 1
 
-        self.addToDeleted(toBeDeleted)
         return toBeDeleted
 
     def addBack(self, num: int) -> None:
-        if num in self.deleted:
-            self.deleted.remove(num)
+        if num not in self.added and num < self.current:
             self.added.append(num)
 
 
@@ -49,6 +38,14 @@ smol.addBack(10)
 
 smol.popSmallest()
 smol.popSmallest()
+
+smol.addBack(1)
+smol.addBack(2)
+smol.addBack(3)
+smol.addBack(4)
+smol.addBack(5)
+smol.addBack(6)
+smol.addBack(7)
 
 
 # set is [3,4,5.....]

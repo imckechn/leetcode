@@ -7,8 +7,8 @@ class SmallestInfiniteSet:
         self.current = 1
 
     def popSmallest(self) -> int:
-        if len(self.added) > 0 and self.added[0] < self.current:
-            toBeDeleted = self.added.pop(0)
+        if len(self.added) > 0 and min(self.added) < self.current:
+            toBeDeleted = self.added.remove(min(self.added))
             
         else:
             toBeDeleted = self.current
@@ -18,7 +18,7 @@ class SmallestInfiniteSet:
 
     def addBack(self, num: int) -> None:
         if num not in self.added and num < self.current:
-            self.added.append(num)
+            self.added.add(num)
 
 
 smol = SmallestInfiniteSet()

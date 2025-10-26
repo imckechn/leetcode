@@ -1,6 +1,3 @@
-# Need to swap over added to a set.
-# See where else you can swap out the logic for set opperations.
-
 class SmallestInfiniteSet:
     def __init__(self):
         self.added = set()

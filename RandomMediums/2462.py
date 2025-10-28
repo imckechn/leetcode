@@ -1,82 +1,67 @@
+from heapq import heapify, heappop, heappush
 from typing import List
 
 class Solution:
     def totalCost(self, costs: List[int], k: int, candidates: int) -> int:
         cost = 0
-        first = True
-        second = True
+        larger = False
+        
+        if candidates*2 < len(costs):
+            larger = True
+            can1 = costs[:candidates]
+            mid = costs[candidates:len(costs)-candidates]
+            can2 = costs[len(costs)-candidates:]
+            heapify(can1)
+            heapify(can2)
 
-        for i in range(k):
-            if candidates*2 < len(costs):                
-                can1 = costs[:candidates]
-                mid = costs[candidates:len(costs)-candidates]
-                can2 = costs[len(costs)-candidates:]
-
-                if first:
-                    can1.sort()
-                    can2.sort()
-                    first = False
-
+            while k > 0 and len(mid) > 0:
+                k -= 1
                 if can1[0] <= can2[0]:
-                    cost += can1.pop(0)
-                    new = mid.pop(0)
-                    for i in range(len(can1)):
-                        if can1[i] > new:
-                            can1.insert(i, new)
-                            new = -1
-                            break
-                    
-                    if new != -1:
-                        can1.append(new)
+                    cost += heappop(can1)
+                    heappush(can1, mid.pop(0))
                     
                 else:
-                    cost += can2.pop(0)
-                    new = mid.pop()
-                    for i in range(len(can2)):
-                        if can2[i] > new:
-                            can2.insert(i, new)
-                            new = -1
-                            break
+                    cost += heappop(can2)
+                    heappush(can2, mid.pop())
+        
+        if larger:
+            costs = can1 + can2
 
-                    if new != -1:
-                        can2.append(new)
+        heapify(costs)
 
-                costs = can1 + mid + can2
-
-            else:
-                if second:
-                    costs.sort()
-                    second = False
-                cost += costs.pop(0)
+        while k > 0 and costs != []:
+            k -= 1
+            cost += heappop(costs)
 
         return cost
 
+
 sol = Solution()
 
-# #Test 1
-# costs = [17,12,10,2,7,2,11,20,8]
-# k = 3
-# can = 4
-# expected = 11
+#Test 1
+costs = [17,12,10,2,7,2,11,20,8]
+k = 3
+can = 4
+expected = 11
 
-# ans = sol.totalCost(costs, k, can)
-# if ans == expected:
-#     print("Test 1 passed")
-# else:
-#     print("Test 2 failed")
+ans = sol.totalCost(costs, k, can)
+if ans == expected:
+    print("Test 1 passed")
+else:
+    print("Test 2 failed")
 
 
-# #Test 2
-# costs = [1,2,4,1]
-# k = 3
-# can = 3
-# expected = 4
+#Test 2
+costs = [1,2,4,1]
+k = 3
+can = 3
+expected = 4
 
-# ans = sol.totalCost(costs, k, can)
-# if ans == expected:
-#     print("Test 2 passed")
-# else:
-#     print("Test 2 failed")
+ans = sol.totalCost(costs, k, can)
+if ans == expected:
+    print("Test 2 passed")
+else:
+    print("Test 2 failed")
 
 
 #Test 3

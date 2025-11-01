@@ -3,41 +3,65 @@ from typing import List
 
 class Solution:
     def combinationSum3(self, k: int, n: int) -> List[List[int]]:
-        ans =  self.comboSum([1,2,3,4,5,6,7,8,9], n , k, [])
+        results = []
 
-        unique_sublists = []
-        seen = set()
-        for sub in ans:
-            if len(sub) == len(set(sub)):  # all elements unique
-                key = tuple(sorted(sub))
-                if key not in seen:
-                    seen.add(key)
-                    unique_sublists.append(sub)
+        def backtrack(remain, comb, next_start):
+            if remain == 0 and len(comb) == k:
+                # make a copy of current combination
+                # Otherwise the combination would be reverted in other branch of backtracking.
+                results.append(list(comb))
+                return
+            elif remain < 0 or len(comb) == k:
+                # exceed the scope, no need to explore further.
+                return
 
-        return unique_sublists
+            # Iterate through the reduced list of candidates.
+            for i in range(next_start, 9):
+                comb.append(i + 1)
+                backtrack(remain - i - 1, comb, i + 1)
+                # backtrack the current choice
+                comb.pop()
 
-    def comboSum(self, numSet: list[int], target: int, choicesLeft: int, currentChoices: list[int]):
-        if choicesLeft == 0:
-            return
+        backtrack(n, [], 0)
+
+        return results
+    
+    # def combinationSum3(self, k: int, n: int) -> List[List[int]]:
+    #     ans =  self.comboSum([1,2,3,4,5,6,7,8,9], n , k, [])
+    #     unique_sublists = []
+    #     seen = set()
+
+    #     for sub in ans:
+    #         if len(sub) == len(set(sub)):  # all elements unique
+    #             key = tuple(sorted(sub))
+    #             if key not in seen:
+    #                 seen.add(key)
+    #                 unique_sublists.append(sub)
+
+    #     return unique_sublists
+
+    # def comboSum(self, numSet: list[int], target: int, choicesLeft: int, currentChoices: list[int]):
+    #     if choicesLeft == 0:
+    #         return
         
-        if choicesLeft == 1:
-            finalOption = target - sum(currentChoices)
+    #     if choicesLeft == 1:
+    #         finalOption = target - sum(currentChoices)
 
-            if finalOption in numSet:
-                currentChoices.append(finalOption)
-                return [currentChoices]
-            else:
-                return None
+    #         if finalOption in numSet:
+    #             currentChoices.append(finalOption)
+    #             return [currentChoices]
+    #         else:
+    #             return None
             
-        else:
-            answers = []
-            for i in range(len(numSet)):
-                ans = self.comboSum(numSet[:i] + numSet[i+1:], target, choicesLeft-1, currentChoices + [numSet[i]])
+    #     else:
+    #         answers = []
+    #         for i in range(len(numSet)):
+    #             ans = self.comboSum(numSet[:i] + numSet[i+1:], target, choicesLeft-1, currentChoices + [numSet[i]])
 
-                if ans != None:
-                    answers = answers + ans
+    #             if ans != None:
+    #                 answers = answers + ans
 
-            return answers
+    #         return answers
         
 
 sol = Solution()

@@ -5,6 +5,7 @@ from typing import List
 class Solution:
     def processQueries(self, c: int, connections: List[List[int]], queries: List[List[int]]) -> List[int]:
         map = {x+1:[] for x in range(c)}
+        smallestFound = {x+1:x+1 for x in range(c)}
         disabled = []
         answer = []
 
@@ -26,9 +27,15 @@ class Solution:
                 answer.append(query[1])
 
             else:
+                current = query[1]
+
+                #See if we've already found the smallest
+                if current <= c and smallestFound[current] not in disabled:
+                    answer.append(smallestFound[current])
+                    continue
+
                 queue = []
                 visited = []
-                current = query[1]
                 smallest = inf
 
                 while True:
@@ -48,6 +55,7 @@ class Solution:
                 if smallest == inf:
                     answer.append(-1)
                 else:
+                    smallestFound[query[1]] = smallest
                     answer.append(smallest)
         return answer
 
@@ -56,24 +64,35 @@ class Solution:
 
 sol = Solution()
 
-#Test 2
+# #Test 2
+# con = []
+# queries = [[1,1],[2,1],[1,1]]
+# expected = [1, -1]
+
+# ans = sol.processQueries(3, con, queries)
+# if ans != expected:
+#     print("Test 2 failed")
+# else:
+#     print("Test 2 passed")
+
+# #Test 1
+# con = [[1,2],[2,3],[3,4],[4,5]]
+# queries = [[1,3],[2,1],[1,1],[2,2],[1,2]]
+# expected = [3,2,3]
+
+# ans = sol.processQueries(5, con, queries)
+# if ans != expected:
+#     print("Test 1 failed")
+# else:
+#     print("Test 1 passed")
+
+#Test 3
 con = []
-queries = [[1,1],[2,1],[1,1]]
-expected = [1, -1]
-
-ans = sol.processQueries(3, con, queries)
-if ans != expected:
-    print("Test 2 failed")
-else:
-    print("Test 2 passed")
-
-#Test 1
-con = [[1,2],[2,3],[3,4],[4,5]]
-queries = [[1,3],[2,1],[1,1],[2,2],[1,2]]
+queries = [[2,1],[2,1],[1,1],[1,1],[2,1],[1,1],[1,1],[2,1]]
 expected = [3,2,3]
 
-ans = sol.processQueries(5, con, queries)
+ans = sol.processQueries(1, con, queries)
 if ans != expected:
-    print("Test 1 failed")
+    print("Test 3 failed")
 else:
-    print("Test 1 passed")
+    print("Test 3 passed")

@@ -4,37 +4,33 @@ from typing import List
 class Solution:
     def threeSumClosest(self, nums: List[int], target: int) -> int:
         nums.sort()
-        leftPointer = 0
-        rightPointer = len(nums) - 1
-        middlePointer = int((rightPointer-leftPointer)/2 + leftPointer)
-        closest = nums[0] + nums[1] + nums[2]
+        totalClosest = nums[0]+nums[1]+nums[2]
 
-        while leftPointer != middlePointer and middlePointer != rightPointer:
-            sum = nums[leftPointer] + nums[middlePointer] + nums[rightPointer]
+        for fixed in range(len(nums)-1):
+            left = fixed+1
+            right = len(nums)-1
 
-            if abs(target - closest) > abs(target - sum):
-                closest = sum
+            sum = nums[fixed] + nums[left] + nums[right]
+            currentClosest = sum
 
-            if sum == target:
-                return sum
-
-            elif sum > target:
-                if middlePointer-1 > leftPointer:
-                    middlePointer -= 1
+            while left != right:
+                sum = nums[fixed] + nums[left] + nums[right]
                 
-                else:
-                    rightPointer -= 1
-                    middlePointer = int((rightPointer-leftPointer)/2 + leftPointer)
+                if abs(target - currentClosest) > abs(target - sum):
+                    currentClosest = sum
 
-            else:
-                if middlePointer+1 < rightPointer:
-                    middlePointer += 1
-                
+                if sum > target:
+                    right -=1
                 else:
-                    leftPointer += 1
-                    middlePointer = int((rightPointer-leftPointer)/2 + leftPointer)
+                    left += 1
 
-        return sum
+            if abs(target - totalClosest) > abs(target - currentClosest):
+                totalClosest = currentClosest
+
+            if totalClosest == target:
+                break
+            
+        return totalClosest
 
 
 sol = Solution()
@@ -61,10 +57,10 @@ sol = Solution()
 
 #Test 3
 input = [4,0,5,-5,3,3,0,-4,-5]
-expected = 3
+expected = -2
 ans = sol.threeSumClosest(input, -2)
 
 if ans != expected:
-    print("T3 Failed")
+    print("T3 Failed, got " + str(ans))
 else:
     print("T3 Passed")

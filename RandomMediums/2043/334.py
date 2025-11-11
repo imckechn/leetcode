@@ -4,34 +4,17 @@ from typing import List
 
 class Solution:
     def increasingTriplet(self, nums: List[int]) -> bool:
-        prev = inf
+        first = inf
+        second = inf
 
-        for i in range(len(nums)):
-            if nums[i] < prev:
-                ans = self.findTrip(nums[i:], nums[i], 2)
-
-                if ans:
-                    return ans
-                else:
-                    prev = nums[i]
-        return False
-
-
-
-    def findTrip(self, nums, nextSmallest, depth):
-        if depth == 0:
-            return True
-        prev = inf
-
-        for i in range(len(nums)):
-            if nums[i] > nextSmallest and nums[i] < prev:
-                ans = self.findTrip(nums[i:], nums[i], depth-1)
-
-                if ans:
-                    return ans
-                else:
-                    prev = nums[i]
-
+        for num in nums:
+            if num <= first:
+                first = num
+            elif num <= second:
+                second = num
+            else:
+                return True
+            
         return False
 
 
@@ -40,7 +23,7 @@ class Solution:
 sol = Solution()
 
 #Test 1
-input = [1,2,3,4,5]
+input = [20,100,10,12,5,13]
 expected = True
 ans = sol.increasingTriplet(input)
 

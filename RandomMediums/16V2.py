@@ -4,33 +4,24 @@ from typing import List
 class Solution:
     def threeSumClosest(self, nums: List[int], target: int) -> int:
         nums.sort()
-        totalClosest = nums[0]+nums[1]+nums[2]
+        closest = inf
 
         for fixed in range(len(nums)-1):
             left = fixed+1
             right = len(nums)-1
 
-            sum = nums[fixed] + nums[left] + nums[right]
-            currentClosest = sum
-
             while left != right:
                 sum = nums[fixed] + nums[left] + nums[right]
-                
-                if abs(target - currentClosest) > abs(target - sum):
-                    currentClosest = sum
+
+                if abs(target-sum) < abs(target-closest):
+                    closest = sum
 
                 if sum > target:
                     right -=1
                 else:
                     left += 1
-
-            if abs(target - totalClosest) > abs(target - currentClosest):
-                totalClosest = currentClosest
-
-            if totalClosest == target:
-                break
             
-        return totalClosest
+        return closest
 
 
 sol = Solution()

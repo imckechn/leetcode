@@ -22,18 +22,16 @@ class Solution:
         pivotFound = False
 
         pivotIndex = len(nums)//2
-        while True:
-            if (pivotIndex == 0 and nums[0] < nums[pivotIndex]) or (pivotIndex == len(nums)-1):
-                break
+        if nums[0] > nums[-1]:
+            while True:
+                if nums[pivotIndex] > nums[pivotIndex+1] and nums[pivotIndex] > nums[pivotIndex-1]:
+                    pivotFound = True
+                    break
 
-            elif nums[pivotIndex] > nums[pivotIndex+1] and nums[pivotIndex] > nums[pivotIndex-1]:
-                pivotFound = True
-                break
-
-            if nums[pivotIndex] > nums[0]:
-                pivotIndex += math.ceil(pivotIndex/2)
-            else:
-                pivotIndex -= math.ceil(pivotIndex/2)
+                if nums[pivotIndex] > nums[0]:
+                    pivotIndex += math.ceil(pivotIndex/2)
+                else:
+                    pivotIndex -= math.ceil(pivotIndex/2)
 
         searchSet = nums
         otherSetLength = 0
@@ -140,6 +138,17 @@ else:
 nums = [1,3,5]
 target = 4
 expected = -1
+
+ans = sol.search(nums, target)
+if ans != expected:
+    print("Failed")
+else:
+    print("Passed")
+
+#Test 3
+nums = [3,4,5,6,7,1,2]
+target = 4
+expected = 1
 
 ans = sol.search(nums, target)
 if ans != expected:

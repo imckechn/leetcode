@@ -7,18 +7,38 @@ class Solution:
         for i in range(len(grid)):
             for j in range(len(grid[0])):
                 if grid[i][j] == "1":
-                    if (j > 0 and grid[i][j-1] == "1") and (i > 1 and grid[i-1][j] == "1") and grid[i-1][j-1] == "0":
-                        count -= 1
-
-                    elif (j == 0 or grid[i][j-1] == "0") and (i == 0 or grid[i-1][j] == "0"):
-                        count += 1
-        
+                    grid = self.bfs(grid, i, j)
+                    count += 1
         return count
-                    #If to the left and above are counted, minus one
 
-                    #elif only to the left or only above are counted, don't increase count
+    def bfs(self, grid, i , j):
+        queue = [[i, j]]
+        gridHeight = len(grid)
+        gridWidth = len(grid[0])
 
-                    # else increase count
+        while len(queue) != 0:
+            n, m = queue.pop(0)
+                            
+            #check above it
+            if n > 0 and grid[n-1][m] == "1":
+                queue.append([n-1, m])
+
+            #Check bellow it
+            if n < gridHeight-1 and grid[n+1][m] == "1":
+                queue.append([n+1, m])
+
+            #Check to the left
+            if m > 0 and grid[n][m-1] == "1":
+                queue.append([n, m-1])
+
+            #Check to the right
+            if m < gridWidth-1 and grid[n][m+1] == "1":
+                queue.append([n, m+1])
+
+            grid[n][m] = "0"
+
+        return grid
+
 
 sol = Solution()
 print(sol.numIslands([["1","1","1","1","0"],["1","1","0","1","0"],["1","1","0","0","0"],["0","0","0","0","0"]]))

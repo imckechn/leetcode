@@ -4,74 +4,74 @@ from typing import List
 
 class Solution:
     def searchRange(self, nums: List[int], target: int) -> List[int]:
-        index = math.ceil(len(nums)/2)
-        change = 1
-        length = len(nums)
+        high = len(nums) - 1
+        low = 0
 
-        if length == 0:
+        if high == -1:
             return [-1,-1]
-        if length == 1:
+        if high == 0:
             if nums[0] == target:
                 return [0,0]
             else:
                 return [-1,-1]
 
-        while change != 0 and index < length:
-            change = math.ceil(index/2)
-            if nums[index] == target:
+        while low <= high:
+            mid = low + (high - low) // 2
+            if nums[mid] == target:
                 return [
-                    self.searchLeft(nums[:index+1], target),
-                    index + self.searchRight(nums[index:], target)
+                    self.searchLeft(nums[:mid+1], target),
+                    mid + self.searchRight(nums[mid:], target)
                 ]
 
-            elif nums[index] > target:
-                index -= change
+            elif nums[mid] < target:
+                low = mid + 1
             
             else:
-                index += change
+                high = mid - 1
 
         return [-1,-1]
 
 
     def searchRight(self, nums, target):
-        length = len(nums)
-        index = math.ceil(length/2)
-        change = 1
+        high = len(nums) - 1
+        low = 0
 
-        if length == 1:
+        if high == 0:
             return 0
 
-        while change != 0 and index < length:
-            change = math.ceil(index/2)
-            if nums[index] == target and (index == length - 1 or  nums[index+1] != target):
-                return index
+        while low <= high:
+            mid = low + (high - low) // 2
+
+            if nums[mid] == target and (mid == high or  nums[mid+1] != target):
+                return mid
             
-            elif nums[index] != target:
-                index -= change
-
-            else: index += change
-
-        return 0
+            elif nums[mid] != target:
+                high = mid - 1
+            
+            else:
+                low = mid + 1
+                
+        return low
 
     def searchLeft(self, nums, target):
-        length = len(nums)
-        index = math.ceil(length/2)
-        change = 1
+        high = len(nums) - 1
+        low = 0
 
-        if length == 1:
+        if high == 0:
             return 0
 
-        while change != 0 and index < length:
-            change = math.ceil(index/2)
-            if nums[index] == target and (index == 0 or index-1 >= 0 and nums[index-1] != target):
-                return index
+        while low <= high:
+            mid = low + (high - low) // 2
+            if nums[mid] == target and (mid == 0 or mid-1 >= 0 and nums[mid-1] != target):
+                return mid
             
-            elif nums[index] != target:
-                index += change
+            elif nums[mid] != target:
+                low = mid + 1
+            
+            else:
+                high = mid - 1
 
-            else: index -= change
-
-        return length-1
+        return high
     
 sol = Solution()
 

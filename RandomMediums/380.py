@@ -6,23 +6,21 @@ class RandomizedSet:
         self.elements = {}
 
     def insert(self, val: int) -> bool:
-        try:
-            if self.elements[val]:
-                return False
-        except:
-            self.elements[val] = True
-            return True
+        if val in self.elements:
+            return False
+        
+        self.elements[val] = True
+        return True
 
     def remove(self, val: int) -> bool:
-        try:
+        if val in self.elements:
             self.elements.pop(val)
             return True
-        except:
-            return False
+        return False
 
     def getRandom(self) -> int:
         keys = list(self.elements.keys())
-        index = random.randint(0, len(keys))
+        index = random.randint(0, len(keys)-1)
         return keys[index]
         
 

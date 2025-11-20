@@ -1,26 +1,29 @@
-class RandomizedSet:
+import random
 
+
+class RandomizedSet:
     def __init__(self):
-        self.elements = set()
+        self.elements = {}
 
     def insert(self, val: int) -> bool:
-       if self.elements.__contains__(val):
-           return False
-       else:
-           self.elements.add(val)
-           return True        
+        try:
+            if self.elements[val]:
+                return False
+        except:
+            self.elements[val] = True
+            return True
 
     def remove(self, val: int) -> bool:
         try:
-            self.elements.remove(val)
+            self.elements.pop(val)
             return True
         except:
             return False
 
     def getRandom(self) -> int:
-        elem =  self.elements.pop()
-        self.elements.add(elem)
-        return elem
+        keys = list(self.elements.keys())
+        index = random.randint(0, len(keys))
+        return keys[index]
         
 
 

@@ -1,4 +1,9 @@
 from typing import List
+import heapq
+
+#Need to try keeping track of smallest and largest elements in heaps. This should reduce the complexity.
+# Sliding window approach was right but needed to us heaps instead of regular searching 
+
 
 class Solution:
     def longestSubarray(self, nums: List[int], limit: int) -> int:
@@ -8,9 +13,10 @@ class Solution:
         
         count = 1
         left = 0
-        right = 1
-        smallest = min(nums[left], nums[right])
-        largest = max(nums[left], nums[right])
+        right = 0
+        minHeap = heapq.heapify(nums[0])
+        maxHeap = heapq.heapify_max(nums[0])
+
 
         while right < numsLength:
 
@@ -24,40 +30,13 @@ class Solution:
                 if right == numsLength:
                     break
 
-                smallest = min(smallest, nums[right])
-                largest =  max(largest, nums[right])
-
             #reduce window size from right 
             #Make sure left != right
             else:
-                if left == numsLength:
-                    break
-
-                if nums[left] == smallest:
-                    newSmallest = nums[left+1]
-                    index = left+1
-                    for i in range(left+1, right):
-                        if nums[i] < newSmallest:
-                            newSmallest = nums[i]
-                            index = i
-
-                    left = index
-                    smallest = newSmallest
+                if nums[left] == minHeap[0]:
+                    
 
 
-                elif nums[left] == largest:
-                    newLargest = nums[left+1]
-                    index = left+1
-                    for i in range(left+1, right):
-                        if nums[i] > newLargest:
-                            newLargest = nums[i]
-                            index = i
-
-                    left = index
-                    largest = newLargest
-
-                else:
-                    left += 1
         return count
     
 sol = Solution()

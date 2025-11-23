@@ -3,42 +3,38 @@ from typing import List
 
 
 class Solution:
-    def canFinish(self, numCourses: int, prerequisites: List[List[int]]) -> bool:
-        preReqs = {}
-        for course in prerequisites:
-            if course[0] in preReqs:
-                preReqs[course[0]].append(course[1])
-            else:
-                preReqs[course[0]] = [course[1]]
-        
-        while len(preReqs.keys()) != 0:
-            ans = self.dfs(preReqs, list(preReqs.keys())[0], [])
-            if ans == False:
-                return False
-        return True
-    
-    def dfs(self, preReqs, key, visited):
-        if key in visited:
-            return False
-        visited.append(key)
-
-        if key not in preReqs.keys():
+    def dfs(self, node, adj, visit, inStack):
+        # If the node is already in the stack, we have a cycle.
+        if inStack[node]:
             return True
-        
-        for val in preReqs[key]:
-            if val in visited:
-                continue
-            ans = self.dfs(preReqs, val, visited)
-            if not ans:
-                return ans
-            
-        preReqs.pop(key)
+        if visit[node]:
+            return False
+        # Mark the current node as visited and part of current recursion stack.
+        visit[node] = True
+        inStack[node] = True
+        for neighbor in adj[node]:
+            if self.dfs(neighbor, adj, visit, inStack):
+                return True
+        # Remove the node from the stack.
+        inStack[node] = False
+        return False
+
+    def canFinish(self, numCourses: int, prerequisites: List[List[int]]) -> bool:
+        adj = [[] for _ in range(numCourses)]
+        for prerequisite in prerequisites:
+            adj[prerequisite[1]].append(prerequisite[0])
+
+        visit = [False] * numCourses
+        inStack = [False] * numCourses
+        for i in range(numCourses):
+            if self.dfs(i, adj, visit, inStack):
+                return False
         return True
 
 sol = Solution()
 
-numCourses = 2
-prerequisites = [[0,1],[0,2],[1,2]]
+numCourses = 5
+prerequisites = [[1,4],[2,4],[3,1],[3,2]]
 print("Should be True")
 print(sol.canFinish(numCourses, prerequisites))
 

@@ -10,26 +10,40 @@ class TreeNode:
         self.right = right
         
 class Solution:
+    location = None
+    changeMade = True
+
     def recoverTree(self, root: Optional[TreeNode]) -> None:
-        self.recover(root, -inf, inf)
-    
+        while self.changeMade:
+            self.changeMade = False
+            self.location = None
+            self.recover(root, -inf, inf)
+            
     def recover(self, root, min, max):
-        if not root:
+        if root.val > max:
+            self.location = [root, max]
+            return
+        elif root.val < min:
+            self.location = [root, min]
             return
         
-        self.recoverTree(root.right, root.val, max)
-        self.recoverTree(root.left, min, root.val)
-        
-        if root.left and (root.left.val > root.val or left.val):
-            root.val, root.left.val = root.left.val, root.val
-        elif root.right and root.right.val < root.val:
-            root.val, root.right.val = root.right.val, root.val
-        return
+        if root.left: self.recover(root.left, min, root.val)
+        if root.right: self.recover(root.right, root.val, max)
 
-rightChild = TreeNode(3)
-right = TreeNode(4, rightChild)
-left = TreeNode(1)
-head = TreeNode(2, left, right)
+        if self.location and self.location[1] == root.val:
+            root.val, self.location[0].val = self.location[0].val, root.val
+            self.changeMade = True
+
+
 sol = Solution()
+
+# rightChild = TreeNode(3)
+# right = TreeNode(4, rightChild)
+# left = TreeNode(1)
+# head = TreeNode(2, left, right)
+
+left = TreeNode(3)
+right = TreeNode(2)
+head = TreeNode(1, left, right)
 
 sol.recoverTree(head)

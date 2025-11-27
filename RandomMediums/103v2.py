@@ -11,55 +11,24 @@ class Solution:
         if not root:
             return []
 
-        queue = [[[root, 0]]]
+        queue = [[root, 0]]
         ans = []
 
-        while True:
-            node = level = None
-            for i in range(len(queue)):
-                if len(queue[i]) != 0:
-                    node, level = queue[i].pop()
-                    break
-            
-            if not node:
-                break
+        while queue != []:
+            node, level = queue.pop()
 
-            if level%2 == 0:
-                if node.left:
-                    if len(queue) > level+1:
-                        queue[level+1].append([node.left, level+1])
-                    else:
-                        queue.append([[node.left, level+1]])
-                if node.right:
-                    if len(queue) > level+1:
-                        queue[level+1].append([node.right, level+1])
-                    else:
-                        queue.append([[node.right, level+1]])
+            if node.right: queue.append([node.right, level+1])
+            if node.left: queue.append([node.left, level+1])
 
-                if len(ans) > level:
-                    ans[level].insert(0,node.val)
-                else:
-                    ans.append([node.val])
-                
+            if len(ans) > level:
+                ans[level].append(node.val)
             else:
-                
-                if node.left:
-                    if len(queue) > level+1:
-                        queue[level+1].append([node.left, level+1])
-                    else:
-                        queue.append([[node.left, level+1]])
-                if node.right:
-                    if len(queue) > level+1:
-                        queue[level+1].append([node.right, level+1])
-                    else:
-                        queue.append([[node.right, level+1]])
+                ans.append([node.val])
 
-                if len(ans) > level:
-                    ans[level].append(node.val)
-                else:
-                    ans.append([node.val])
+        for i in range(len(ans)):
+            if i %2 == 1:
+                ans[i] = ans[i][::-1]
         return ans
-    
 
 
 sol = Solution()

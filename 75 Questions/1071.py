@@ -2,38 +2,36 @@ class Solution:
     def gcdOfStrings(self, str1: str, str2: str) -> str:
         shortest = min(len(str1), len(str2))
         longest = max(len(str1), len(str2))
-        
-        isMatch = False
-        distance = shortest
-        subString = ""
-        if len(str1) == shortest:
-            subString = str1
-        else:
-            subString = str2
 
-        while not isMatch:
-            isMatch = True
-
-            if len(str1) % distance == 0 and len(str2) % distance == 0:
-                for i in range(0, longest, distance):
-                        if len(str1) >= i+distance and str1[i:i+distance] != subString:
-                            isMatch = False
-                            break
-                        if len(str2) >= i+distance and str2[i:i+distance] != subString:
-                            isMatch = False
-                            break
-            else:
-                isMatch = False
-            
-            if not isMatch:
-                distance = distance //2
-                subString = subString[:distance]
-
-            if subString == "":
+        found = ""
+        for i in range(1, shortest+1):
+            if len(str1) % i == 0 and len(str2) % i == 0:
                 isMatch = True
-        
-        return subString
+                wordBeingChecked = str1[:i]
+                for j in range(0, longest, i):
+                    if len(str1) >= i+j and str1[j:i+j] != wordBeingChecked:
+                        isMatch = False
+                        break
+                    if len(str2) >= i+j and str2[j:i+j] != wordBeingChecked:
+                        isMatch = False
+                        break
 
+                if isMatch:
+                    found = wordBeingChecked
+        return found
+
+sol = Solution()
+
+# Test 0
+inputA = "ABCABC"
+inputB = "ABC"
+expected = "ABC"
+
+answer = sol.gcdOfStrings(inputA, inputB)
+if answer != expected:
+    print("Failed, got " + answer + ", expected " + expected)
+else:
+    print("Passed")
 sol = Solution()
 
 # Test 1

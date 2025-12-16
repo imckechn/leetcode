@@ -12,9 +12,10 @@ class Solution:
         sum = 1
         answer = []
         for i in range(len(nums)-2, -1, -1):
-            answer.insert(0, leftToRight[i] * sum)
+            answer.append(leftToRight[i] * sum)
             sum *= nums[i]
 
+        answer.reverse()
         return answer
 
 sol= Solution()

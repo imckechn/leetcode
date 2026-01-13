@@ -6,7 +6,7 @@ class Solution:
         total = 0
 
         for row in grid:
-            row = str(row)
+            row = tuple(row)
             if row in found:
                 found[row] += 1
             else:
@@ -15,7 +15,7 @@ class Solution:
         res = [[grid[j][i] for j in range(len(grid))] for i in range(len(grid[0]))]
 
         for row in res:
-            row = str(row)
+            row = tuple(row)
             if row in found:
                 total += found[row]
 

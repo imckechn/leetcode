@@ -1,0 +1,23 @@
+from cmath import inf
+import heapq
+from typing import List
+
+class Solution:
+    def maxScore(self, nums1: List[int], nums2: List[int], k: int) -> int:
+        pairs = sorted(zip(nums1, nums2), key=lambda x:-x[1])
+        heap = []
+        total = 0
+        result = 0
+        for num1, num2 in pairs:
+            heapq.heappush(heap, num1)
+            total += num1
+            if len(heap) > k:
+                total -= heapq.heappop(heap)
+            if len(heap) == k:
+                result = max(result, total*num2)
+        
+        return result
+
+
+sol = Solution()
+print(sol.maxScore([2,1,14,12], [11,7,13,6], 3))

@@ -1,42 +1,30 @@
 from typing import List
+from collections import defaultdict
 
 class Solution:
     def minReorder(self, n: int, connections: List[List[int]]) -> int:
-        roads = {}
-        swaps = 0
+        roads = set()
+        graph = defaultdict(list)
+        for x, y in connections:
+            graph[x].append(y)
+            graph[y].append(x)
+            roads.add((x,y))
 
-        for i in range(n):
-            roads[i] = []
+        def dfs(node):
+            ans = 0
+            for neighbor in graph[node]:
+                if neighbor not in seen:
+                    if (node, neighbor) in roads: # This is the edge
+                        ans += 1
+                    seen.add(neighbor)
+                    ans += dfs(neighbor)
+            return ans
 
-        for connection in connections:
-            roads[connection[0]].append(connection[1])
-        
-        while True:
-            for key, values in roads.items():
-                if 0 in values:
-                    newValues = roads[key]
-                    roads[key] = []
-                    newValues.remove(0)
-                    roads[0] += newValues
-
-            newVals = []
-            for value in roads[0]:
-                swaps += 1
-
-                if value in roads:
-                    newVals += roads[value]
-                    roads[value] = []
-
-            roads[0] = newVals
-
-            if roads[0] != []:
-                break
-
-        return swaps
-
+        seen = {0}
+        return dfs(0)
     
 sol = Solution()
-sol.minReorder(5, [[1,0],[1,2],[3,2],[3,4]])
-sol.minReorder(6, [[0,1],[1,3],[2,3],[4,0],[4,5]])
+print(sol.minReorder(6, [[0,1],[1,3],[2,3],[4,0],[4,5]]))
+print(sol.minReorder(5, [[1,0],[1,2],[3,2],[3,4]]))
 
-        
+[[0,3],[2,3]]

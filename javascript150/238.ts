@@ -4,7 +4,7 @@ function productExceptSelf(nums: number[]): number[] {
     let answer = []
     
     let product = 1
-    for (let i = 0; i < nums.length; i++) {
+    for (let i = nums.length-1; i >= 0; i--) {
         product *= nums[i]
         left.splice(0,0,product)
     }
@@ -16,7 +16,7 @@ function productExceptSelf(nums: number[]): number[] {
     }
 
     for (let i = 0; i < nums.length; i++) {
-        answer.push(left[i] * right[i+1])
+        answer.push(left[i+1] * right[i])
     }
 
     return answer;

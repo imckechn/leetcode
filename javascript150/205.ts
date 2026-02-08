@@ -1,28 +1,23 @@
 function isIsomorphic(s: string, t: string): boolean {
-    if (s.length != t.length) {
-        return false
+    if (s.length != t.length) return false
+
+    let swaps = new Map()
+    let used = new Set();
+
+    for (let i = 0; i < s.length; i++) {
+        if (swaps.has(s[i]) && swaps.get(s[i]) != t[i]) {
+            return false
+        
+        } else if (!swaps.has(s[i]) && used.has(t[i])) {
+            return false
+        
+        } else if (!swaps.has(s[i])) {
+            swaps.set(s[i], t[i])
+            used.add(t[i])
+        }
     }
 
-    let countA = new Map()
-    let countB = new Map()
-
-    for (const c of s) {
-        const currentCount = countA.get(c) || 0;
-        countA.set(c, currentCount + 1);
-    }
-
-    for (const c of t) {
-        const currentCount = countB.get(c) || 0;
-        countB.set(c, currentCount + 1);
-    }
-
-    let valuesA = [...countA.values()].sort((a,b) => a-b)
-    let valuesB = [...countB.values()].sort((a,b) => a-b)
-
-    for (let i = 0; i < valuesA.length; i++) {
-        if (valuesA[i] != valuesB[i]) return false
-    }
-    return true
+    return true;
 };
 
 isIsomorphic("egg", "add")

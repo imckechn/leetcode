@@ -57,6 +57,24 @@ class LRUCache {
     put(key: number, value: number): void {
         if (this.mostRecent.has(key)) {
             this.mostRecent.get(key)!.val = value
+            let elem = this.mostRecent.get(key)
+
+            if (elem?.older) {
+                elem.older.newer = elem.newer
+            }
+
+            if (elem?.newer) {
+                elem.newer.older = elem.older
+            }
+
+            elem!.older = this.newest
+            elem!.newer = null
+            this.newest!.newer = elem! 
+            this.newest = elem!
+
+            if (this.oldest == this.newest && this.currentCapacity > 1) {
+                this.oldest = this.oldest.older
+            }
         
         } else if (this.currentCapacity < this.maxCapacity) { //Add a new one
             this.currentCapacity++
@@ -77,8 +95,7 @@ class LRUCache {
         } else {
             let toBeDeleted = this.oldest
             this.oldest = this.oldest!.newer
-            this.oldest!.older = null
-
+            
             this.mostRecent.delete(toBeDeleted!.key)
 
             let newHead = new DoublelyListNode(key, value, null, this.newest)
@@ -86,26 +103,28 @@ class LRUCache {
             this.newest = this.newest!.newer
 
             this.mostRecent.set(key, newHead)
+
+            if (this.oldest) {
+                this.oldest!.older = null
+            } else {
+                this.oldest = this.newest
+            }
         }
     }
 }
 
 
 let cache = new LRUCache(1)
-cache.put(2,1)
-console.log(cache.get(1))
-
-
-
-cache.put(1,1)
-cache.put(2,2)
-console.log(cache.get(1))
-cache.put(3,3)
+console.log(cache.get(6))
+console.log(cache.get(8))
+cache.put(12,1)
 console.log(cache.get(2))
-cache.put(4,4)
-console.log(cache.get(1))
-console.log(cache.get(3))
+cache.put(15, 11)
+cache.put(5,2)
+cache.put(1,15)
+cache.put(4,2)
 console.log(cache.get(4))
+cache.put(15,15)
 
 
 /**

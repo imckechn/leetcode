@@ -1,14 +1,14 @@
-class _Node {
-    val: number
-    next: _Node | null
-    random: _Node | null
+// class _Node {
+//     val: number
+//     next: _Node | null
+//     random: _Node | null
 
-    constructor(val?: number, next?: _Node, random?: _Node) {
-        this.val = (val===undefined ? 0 : val)
-        this.next = (next===undefined ? null : next)
-        this.random = (random===undefined ? null : random)
-    }
-}
+//     constructor(val?: number, next?: _Node, random?: _Node) {
+//         this.val = (val===undefined ? 0 : val)
+//         this.next = (next===undefined ? null : next)
+//         this.random = (random===undefined ? null : random)
+//     }
+// }
 
 
 let visited = new Map()

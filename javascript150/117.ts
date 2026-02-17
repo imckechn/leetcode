@@ -48,11 +48,11 @@ function connect(root: _Node | null): _Node | null {
     return root
 };
 
-let left = new _Node(4)
-let mid = new _Node(5)
-// let right = new _Node(7)
-let midLeft = new _Node(2, left, mid)
-let midRight = new _Node(3)
-let head = new _Node(1, midLeft, midRight)
+// let left = new _Node(4)
+// let mid = new _Node(5)
+// // let right = new _Node(7)
+// let midLeft = new _Node(2, left, mid)
+// let midRight = new _Node(3)
+// let head = new _Node(1, midLeft, midRight)
 
 connect(head)

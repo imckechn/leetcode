@@ -19,18 +19,18 @@ function connect(root: _Node | null): _Node | null {
     let current = root
     let stack: [_Node, number][] = []
     let rightLine: _Node[] = []
-    let level = 1
+    let level = 0
 
     while (current) {
         if (rightLine.length > level) {
             current.next = rightLine[level]
-            rightLine[stack.length] = current
+            rightLine[level] = current
         } else {
             rightLine.push(current)
         }
 
         if (current.left) {
-            stack.push([current.left, level])
+            stack.push([current.left, level+1])
         }
 
         if (current.right) {
@@ -50,9 +50,9 @@ function connect(root: _Node | null): _Node | null {
 
 let left = new _Node(4)
 let mid = new _Node(5)
-let right = new _Node(7)
+// let right = new _Node(7)
 let midLeft = new _Node(2, left, mid)
-let midRight = new _Node(3, undefined, right)
+let midRight = new _Node(3)
 let head = new _Node(1, midLeft, midRight)
 
 connect(head)

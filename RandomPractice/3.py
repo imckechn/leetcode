@@ -1,29 +1,27 @@
 class Solution:
     def lengthOfLongestSubstring(self, s: str) -> int:
-        if len(s) == 0: return 0
+        if len(s) < 1:
+            return 0
 
-        found = set(s[0])
-        left = 0
-        right = 1
-        largest = 1
+        leftPointer = 0
+        rightPointer = 0
 
+        found = {s[0]}
 
-        while right < len(s):
-            if s[right] in found:
-                
-                while s[left] != s[right]:
-                    found.remove(s[left])
-                    left += 1
+        longestLength = 1
 
-                left += 1
+        while rightPointer < len(s)-1:
+            rightPointer += 1
+
+            if s[rightPointer] in found:
+
+                while (s[leftPointer] != s[rightPointer]):
+                    found.remove(s[leftPointer])
+                    leftPointer += 1
+                leftPointer += 1
 
             else:
-                found.add(s[right])
+                found.add(s[rightPointer])
+                longestLength = max(longestLength, len(found))
 
-            largest = max(largest, right-left + 1)
-            right += 1
-
-        return largest
-
-sol = Solution()
-print(sol.lengthOfLongestSubstring("au"))
+        return longestLength
